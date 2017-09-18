@@ -1,0 +1,6 @@
+package com.oxchains.mdsc.util;
+
+public class ConstantUtil {
+    //public static String AUTH_USER_TOKEN="eyJhbGciOiJFUzI1NiJ9.eyJqdGkiOiIxNDI2MTI3ZC0xMjUzLTRjODAtODIxOS1hNmZlOGViYTEwMjAiLCJzdWIiOiJhZG1pbiIsImV4cCI6MTUwNDc2NDUxNSwiYXV0aG9yaXR5IjoiTUFOQUdFIiwiYWZmaWxpYXRpb24iOiJvcmcxIn0.mO6jSrgXgbykQVUH5kjeAShIysapcM12wVcHB5L5ItBMQaniXZObsX6BT4i3HkCTFSCd3v2Cyy6O1AIxDEEcJQ";
+    public static String AUTH_USER_TOKEN=null; //token
+}
