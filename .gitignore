@@ -20,3 +20,5 @@ FrontEnd/node_modules/
 FrontEnd/bundle.js
 FrontEnd/npm-debug.log
 .DS_Store
+
+.idea
