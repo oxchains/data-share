@@ -1,55 +1,23 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
-import '../css/App.css';
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            count:0
-        }
-        this.renderClick = this.renderClick.bind(this)
-    }
-    renderClick(){
-        let {count} = this.state;
-        count++;
-        this.setState({
-            count
-        });
-    }
+import NavTop from './common/header';
+import NavSide from './common/nav_side';
+import Footer from './common/footer';
 
+export default class App extends Component {
   render() {
-        console.log('render')
+    const pageTitle = '';
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2 onClick={this.renderClick}>{this.state.count}</h2>
+      <div>
+        <NavTop />
+        <NavSide/>
+        <div className="content-wrapper">
+          <section className="content-header"><h1>{pageTitle}</h1></section>
+          <section className="content">
+            {this.props.children}
+          </section>
         </div>
-        <p className="App-intro">
-          To get started, edit and save to reload.
-        </p>
-          <Childapp/>
+        <Footer/>
       </div>
     );
   }
 }
-
-class Childapp extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
-    render(){
-        return (
-            <div>
-                <ul className="list-ul">
-                    <li name="l1">列表1</li>
-                    <li name="l2">列表2</li>
-                    <li name="l3">列表3</li>
-                </ul>
-            </div>
-        )
-    }
-}
-
-export default App;
