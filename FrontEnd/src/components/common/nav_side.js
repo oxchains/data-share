@@ -11,7 +11,7 @@ class NavSide extends  Component {
       if(biz) {
         return [
           <li key="nav5"><Link href="/search"><i className="fa fa-ticket"></i> <span>搜索病历</span></Link></li>,
-          <li key="nav6"><Link href="/allmdicalrecord"><i className="fa fa-tasks"></i> <span>本院病历</span></Link></li>,
+          <li key="nav6"><Link href="/mdicalrecordofours"><i className="fa fa-tasks"></i> <span>本院病历</span></Link></li>,
         ];
       } else {
         return [

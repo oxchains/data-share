@@ -1,11 +1,3 @@
-/**
- * oxchain ivoice app
- *
- *
- * Author: Jun
- * Date: 19/04/2017
- *
- */
 
 import {
   AUTH_USER,

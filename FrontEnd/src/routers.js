@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
@@ -12,25 +11,19 @@ import Signup from './components/auth/signup';
 import SignupCompany from './components/auth/signupCompany';
 import Search from './components/search';
 import Mdicalrecord from './components/mdicalrecord';
-import Reimburse from './components/reimburse';
 import NewsList from './components/news_list';
-
+import  Mdicalrecordofours from './components/mdicalrecord_ofours';
 
 export default (
   <Route path="/" component={App} >
     <IndexRoute component={Nav}/>
     <Route path="signin" component={Signin} />
     <Route path="signout" component={Signout} />
-
-    <Route path="search" component={RequireAuth(Search)} />
-
     <Route path="signupCompany" component={SignupCompany} />
     <Route path="signup" component={Signup} />
-
-    <Route path="/allmdicalrecord" component={RequireAuth(Mdicalrecord)} />
-    <Route path="/reimburse/:serial" component={RequireAuth(Reimburse)} />
-
-    <Route path="/newslist" component={RequireAuth(NewsList)} />
-
+      <Route path="search" component={RequireAuth(Search)} />
+      <Route path="/newslist" component={RequireAuth(NewsList)} />
+      <Route path="/allmdicalrecord" component={RequireAuth(Mdicalrecord)} />
+      <Route path="/mdicalrecordofours" component={RequireAuth(Mdicalrecordofours)} />
   </Route>
 );

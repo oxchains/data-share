@@ -1,11 +1,3 @@
-/**
- * oxchain ivoice app
- *
- *
- * Author: Jun
- * Date: 13/04/2017
- *
- */
 
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';

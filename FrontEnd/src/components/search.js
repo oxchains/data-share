@@ -11,25 +11,13 @@ class Search extends Component {
     this.state = {};
   }
 
-
-  // renderField({ input, label, type, required, meta: { touched, error } }) {
-  //   return (
-  //     <div className={`form-group has-feedback ${touched && error ? 'has-error' : ''}`}>
-  //       <label htmlFor="name" className="col-sm-3 control-label"><b className="text-danger">{required?'*':''}</b> {label}</label>
-  //       <div className="col-sm-9 input-group">
-  //         <input {...input} placeholder={label} type={type} className="form-control"/>
-  //         <div className="help-block with-errors">{touched && error ? error : ''}</div>
-  //       </div>
-  //     </div>
-  //   )}
     handleFormSubmit(e){
       e.preventDefault()
         const Inputvalue= this.refs.IDInput.value ;
-        this.props.fetchMdicalrecordsearch({InputChoice},()=>{});
+        this.props.fetchMdicalrecordsearch({Inputvalue},()=>{});
     }
 
   render() {
-
     return (<div className="row">
       <div className="col-lg-10 col-lg-offset-2 col-xs-10 col-xs-offset-1">
         <div className="box box-info">

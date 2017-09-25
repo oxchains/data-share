@@ -1,11 +1,4 @@
-/**
- * oxchain ivoice app
- *
- *
- * Author: Jun
- * Date: 13/04/2017
- *
- */
+
 
 import React from 'react';
 

@@ -6,10 +6,14 @@ import { connect } from 'react-redux';
 import { fetchMdicalrecordList } from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 import Moment from 'react-moment';
-import ReactPaginate from 'react-paginate';
 
 class  Mdicalrecord extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
 
+        };
+    }
   componentWillMount() {
     this.props.fetchMdicalrecordList();
   }
@@ -31,11 +35,6 @@ class  Mdicalrecord extends Component {
   //     </tr>);
   //   });
   // }
-
-  handlePageClick(data) {
-    let selected = data.selected;
-    this.props.fetchReimburseList(selected + 1);
-  };
 
   render() {
       const biz= JSON.parse(localStorage.getItem('biz'));
@@ -79,8 +78,9 @@ class  Mdicalrecord extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.mdicalrecord)
+    // console.log(state.mdicalrecord)
   return {
+      all:"hello"
     // all: state.mdicalrecord.all
   };
 }

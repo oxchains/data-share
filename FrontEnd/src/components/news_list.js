@@ -2,17 +2,17 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { fetchNewsList } from '../actions/news';
+import { fetchNewsList } from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 class NewsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      biz : JSON.parse(localStorage.getItem('biz')),
+      // biz : JSON.parse(localStorage.getItem('biz')),
     };
   }
 
-  componentWillMount() {
+    componentWillMount() {
     this.props.fetchNewsList();
   }
 
@@ -65,9 +65,9 @@ class NewsList extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    // all: state.news.all
-  };
+    return {
+        all:"hi"
+        // all: state.mdicalrecord.all
+    };
 }
-
-export default connect(mapStateToProps, { fetchNewsList})(NewsList);
+export default connect(mapStateToProps, { fetchNewsList })(NewsList);
