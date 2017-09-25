@@ -44,7 +44,7 @@ class Header extends  Component {
               </li>
               <li className="user-footer">
                 <div className="pull-left">
-                  <Link href="#" className="btn btn-default btn-flat">{this.biz?"个人设置" : "设置"}</Link>
+                  <Link href="#" className="btn btn-default btn-flat">设置</Link>
                 </div>
                 <div className="pull-right">
                   <Link href="/signout" className="btn btn-default btn-flat">退出登录</Link>

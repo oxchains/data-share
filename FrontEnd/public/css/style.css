@@ -6,3 +6,53 @@ body {
     padding-left: 15px;
     padding-right: 15px;
 }
+.btn-agree
+{
+    border:1px solid #3c8dbc;
+    border-radius: 3px;
+    background-color: #3c8dbc;
+    color: white;
+    padding: 5px;
+}
+.btn-agree:hover,.btn-agree:active
+{
+    background-color: #3c8dbc;
+    color: white;
+    cursor: pointer;
+}
+.input-search
+{
+    width: 300px;
+    height: 35px;
+    border:1px solid lightgray;
+    border-radius: 3px;
+    padding: 5px;
+    font-size:15px ;
+}
+.result-search
+{
+    margin-top: 40px;
+}
+@media (min-width: 1200px){
+    .col-lg-offset-2 {
+        margin-left: 8%;
+    }
+}
+.font-color,.font-color:hover,.font-color:active
+{
+    color: #00c0ef;
+}
+.form-margintop
+{
+    margin-top: 50px;
+}
+.click-search
+{
+    height: 35px;
+    border:1px solid #3c8dbc ;
+    border-radius: 2px;
+    padding: 3px 10px;
+    background-color: #3c8dbc;
+    color: white;
+    margin-left: 20px;
+}

@@ -1,26 +1,17 @@
-/**
- * oxchain ivoice app
- *
- * 企业发票审核列表
- *
- * Author: Jun
- * Email: iyakexi@gmail.com
- * Date: 20/04/2017
- *
- */
+
 
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchReimburseList } from '../actions/reimburse';
+import { fetchMdicalrecordList } from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 import Moment from 'react-moment';
 import ReactPaginate from 'react-paginate';
 
-class ReimburseList extends Component {
+class  Mdicalrecord extends Component {
 
   componentWillMount() {
-    this.props.fetchReimburseList(this.props.params.page);
+    this.props.fetchMdicalrecordList();
   }
 
   // renderRows() {
@@ -34,7 +25,7 @@ class ReimburseList extends Component {
   //       <td>{row.description}</td>
   //       <td>
   //         <Link to={`/reimburse/${row.serial}`} >查看</Link>
-  //         <Link to={`/reimburse/${row.serial}`} >共享</Link>
+  //         <Link to={`/reimburse/${row.serial}`} >{this.biz?"共享":""}</Link>
   //       </td>
   //
   //     </tr>);
@@ -47,6 +38,7 @@ class ReimburseList extends Component {
   };
 
   render() {
+      const biz= JSON.parse(localStorage.getItem('biz'));
     return (
       <div className="row">
         <div className="col-xs-12">
@@ -65,33 +57,20 @@ class ReimburseList extends Component {
                   <th>操作</th>
                 </tr>
                 {/*{ this.renderRows() }*/}
-                <td> &nbsp;1001</td>
-                <td> 精神病啊</td>
-                <td> 2017.9.22</td>
-                <td> 北京协和医院</td>
-                <td> 王大锤</td>
-                <td> 多喝点热水</td>
-                <td>
-                  <a href="">查看</a>
-                  <a href="">共享</a>
-                </td>
+                {/*<tr className="test-center">*/}
+                  {/*<td> &nbsp;1001</td>*/}
+                  {/*<td> 精神病啊</td>*/}
+                  {/*<td> 2017.9.22</td>*/}
+                  {/*<td> 北京协和医院</td>*/}
+                  {/*<td> 王大锤</td>*/}
+                  {/*<td> 多喝点热水</td>*/}
+                  {/*<td >*/}
+                    {/*<a href="/">查看</a>*/}
+                    {/*<a href="" >{this.biz?"共享":""}</a>*/}
+                  {/*</td>*/}
+                {/*</tr>*/}
                 </tbody>
               </table>
-            </div>
-            <div className="box-footer clearfix hidden">
-              <ReactPaginate previousLabel={"«"}
-                             nextLabel={"»"}
-                             breakLabel={<a href="">...</a>}
-                             breakClassName={"break-me"}
-                             pageCount={this.props.pageCount}
-                             initialPage={this.props.params.page-1}
-                             disableInitialCallback={true}
-                             marginPagesDisplayed={2}
-                             pageRangeDisplayed={5}
-                             onPageChange={this.handlePageClick.bind(this)}
-                             containerClassName={"pagination pagination-sm no-margin "}
-                             subContainerClassName={"pages pagination"}
-                             activeClassName={"active"} />
             </div>
           </div>
         </div>
@@ -100,10 +79,10 @@ class ReimburseList extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state.mdicalrecord)
   return {
-    all: state.reimburse.all,
-    pageCount: state.reimburse.pageCount
+    // all: state.mdicalrecord.all
   };
 }
 
-export default connect(mapStateToProps, { fetchReimburseList })(ReimburseList);
+export default connect(mapStateToProps, { fetchMdicalrecordList })(Mdicalrecord);

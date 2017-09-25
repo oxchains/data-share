@@ -1,47 +1,17 @@
-/**
- * oxchain ivoice app
- *
- *
- * Author: Jun
- * Email: iyakexi@gmail.com
- * Date: 21/04/2017
- *
- */
 
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchReimburse, reimburseAction } from '../actions/reimburse';
+import { fetchReimburse, reimburseAction } from '../actions/mdicalrecord';
 import { Link, browserHistory } from 'react-router';
-import Moment from 'react-moment';
-import {
-  Modal,
-  ModalHeader,
-  ModalTitle,
-  ModalClose,
-  ModalBody,
-  ModalFooter
-} from 'react-modal-bootstrap';
 
 class Reimburse extends Component {
   constructor(props) {
     super(props);
     this.state = {
       biz          : JSON.parse(localStorage.getItem('biz')),
-      isModalOpen  : false,
-      spinReject   : false,
-      spinConfirm  : false,
-      error        : null,
-      actionResult : ''
     }
   }
-
-  hideModal = () => {
-    this.setState({
-      isModalOpen: false
-    });
-  };
-
   componentWillMount() {
     this.props.fetchReimburse(this.props.params.serial);
   }
