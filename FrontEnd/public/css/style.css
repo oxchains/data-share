@@ -29,10 +29,6 @@ body {
     padding: 5px;
     font-size:15px ;
 }
-.result-search
-{
-    margin-top: 40px;
-}
 @media (min-width: 1200px){
     .col-lg-offset-2 {
         margin-left: 8%;
@@ -44,7 +40,10 @@ body {
 }
 .form-margintop
 {
-    margin-top: 50px;
+
+    width: 60%;
+    margin: 50px auto;
+
 }
 .click-search
 {
@@ -55,4 +54,38 @@ body {
     background-color: #3c8dbc;
     color: white;
     margin-left: 20px;
+}
+.form-control
+{
+  display: inline;
+}
+/*.hr-color*/
+/*{*/
+    /*border:1px solid #333;*/
+    /*margin: 0;*/
+/*}*/
+/*.list-style*/
+/*{*/
+    /*margin-top: 10px;*/
+    /*height:20px;*/
+/*}*/
+/*.ul-style*/
+/*{*/
+    /*list-style: none;*/
+    /*float: left;*/
+/*}*/
+.td-left
+{
+    width: 20%;
+}
+.td-wrap
+{
+    width: 74%;
+    height: auto;
+    overflow-wrap: break-word;
+}
+.td-right
+{
+    width: 6%;
+    text-align: center;
 }

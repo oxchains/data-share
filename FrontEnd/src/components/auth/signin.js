@@ -8,6 +8,7 @@ import { signinAction } from '../../actions/auth'
 class Signin extends Component {
 
   handleFormSubmit({ username, password, biz }) {
+
     biz = !!biz;
     this.setState({ spin:true });
     if(username && password)

@@ -2,29 +2,43 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { fetchNewsList } from '../actions/mdicalrecord';
+import { fetchNewsList ,fetchNewsAgree,fetchNewsRefuse} from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 class NewsList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // biz : JSON.parse(localStorage.getItem('biz')),
-    };
+    this.state = {};
+    this.handleagree = this.handleagree.bind(this)
+      this.handlerefuse = this.handlerefuse.bind(this)
   }
-
     componentWillMount() {
-    this.props.fetchNewsList();
-  }
+      console.log(this.props.all)
 
+        this.props.fetchNewsList({ },()=>{});
+  }
+  handleagree(){
+      const deadline = "2017-11-08",
+          ownerid   = "1234567",
+          permissiontype = "permission_share",
+          recordid     =   "004",
+          userid       ="bdgjyy1";
+      this.props.fetchNewsAgree({deadline,ownerid,permissiontype,recordid,userid},()=>{});
+  }
+    handlerefuse(){
+        const recordid = "004",
+            userid   = "1234567"
+        this.props.fetchNewsRefuse({recordid,userid},()=>{});
+
+    }
   // renderRows() {
   //   return this.props.all.map((row, idx) => {
   //     return (<tr key={idx}>
   //       <td>{row.title}</td>
   //       <td>
-  //         <Link to={`/invoice/detail/${row.serial}`} className="btn-agree" >同意</Link>
+  //         <button onClick={this.handleagree} className="btn-agree" >同意</button>
   //       </td>
   //         <td>
-  //            <Link to={`/invoice/detail/${row.serial}`} className="btn-agree" >拒绝</Link>
+  //             <button className="btn-agree" onClick={this.handleagree} >拒绝</button>
   //         </td>
   //     </tr>);
   //   });
@@ -33,12 +47,12 @@ class NewsList extends Component {
         // return this.props.all.map((row, idx) => {
             return (
                 <tr>
-                  <td>某某医院申请查看您的病历</td>
+                  <td>某某医院申请查看您的某某病历</td>
                   <td className="text-center">
-                    <Link className="btn-agree" >同意</Link>
+                    <button onClick={this.handleagree} className="btn-agree" >同意</button>
                   </td>
                   <td className="text-center">
-                    <Link className="btn-agree" >拒绝</Link>
+                    <button className="btn-agree" onClick={this.handlerefuse} >拒绝</button>
                   </td>
                 </tr>
             )
@@ -66,8 +80,7 @@ class NewsList extends Component {
 
 function mapStateToProps(state) {
     return {
-        all:"hi"
-        // all: state.mdicalrecord.all
+        all: state.mdicalrecordreducer.all
     };
 }
-export default connect(mapStateToProps, { fetchNewsList })(NewsList);
+export default connect(mapStateToProps, { fetchNewsList ,fetchNewsAgree,fetchNewsRefuse})(NewsList);

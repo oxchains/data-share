@@ -16,6 +16,7 @@ import {
  * @returns {Function}
  */
 export function signinAction({username, password, biz}) {
+    console.log("用户类型"+ biz)
   return function(dispatch) {
     axios.post(`${ROOT_URL}/token`, { username, password, biz })
       .then(response => {
@@ -26,7 +27,6 @@ export function signinAction({username, password, biz}) {
           //localStorage.setItem('user', JSON.stringify(response.data.data));
           localStorage.setItem('username', username);
           localStorage.setItem('biz', JSON.stringify(biz));
-
           dispatch({type: AUTH_USER});
           // - redirect to the route '/'
           browserHistory.push('/');
@@ -98,4 +98,28 @@ export function signupCompany(values, callback) {
       })
       .catch(err => callback(err.message));
   }
+}
+
+/**
+ * 个人信息设置
+ * @param userId
+ * @param userName
+ * @param userInfo
+ * @param userType
+ * @returns {Function}
+ */
+export function fetchselfinfo({ userId, userName, userInfo, userType }, callback) {
+    console.log(`个人信息设置: ${userId}, ${userName}, ${userInfo} ,${userType}`);
+    return function(dispatch) {
+        axios.post(`${ROOT_URL}/register`, { userId, userName, userInfo, userType })
+            .then(response => {
+
+                if(response.data.status == 1) {//save success
+                    callback();
+                } else {//save fail
+                    callback(response.data.message);
+                }
+            })
+            .catch(err => callback(err.message));
+    }
 }

@@ -37,7 +37,7 @@ class Header extends  Component {
               </li>
               <li className="user-footer">
                 <div className="pull-left">
-                  <Link href="#" className="btn btn-default btn-flat">设置</Link>
+                  <Link href="/selfinfo" className="btn btn-default btn-flat">设置</Link>
                 </div>
                 <div className="pull-right">
                   <Link href="/signout" className="btn btn-default btn-flat">退出登录</Link>
@@ -58,7 +58,7 @@ class Header extends  Component {
       <header className="main-header">
         <Link href="/" className="logo">
           <span className="logo-mini"><img src={logo} style={{width:50+'px'}} /></span>
-          <span className="logo-lg"><img src={logo} style={{width:80+'px'}} /><b>电子发票</b></span>
+          <span className="logo-lg"><img src={logo} style={{width:80+'px'}} /><b>电子病历</b></span>
         </Link>
         <nav className="navbar navbar-static-top">
           <Link href="#" className="sidebar-toggle" data-toggle="offcanvas" role="button">

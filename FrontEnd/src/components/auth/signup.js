@@ -79,7 +79,6 @@ class Signup extends Component {
                   <button type="submit" className="btn btn-primary btn-block btn-flat"><i className={`fa fa-spinner fa-spin ${this.state.spin?'':'hidden'}`}></i> 注册</button>
                 </div>
               </div>
-
             </form>
           </div>
         </div>

@@ -1,7 +1,4 @@
-
-
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchMdicalrecordList } from '../actions/mdicalrecord';
 import { Link } from 'react-router';
@@ -10,34 +7,33 @@ import Moment from 'react-moment';
 class  Mdicalrecord extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
+        this.renderRows = this.renderRows.bind(this)
     }
   componentWillMount() {
-    this.props.fetchMdicalrecordList();
+      const userID = "1234567"
+    this.props.fetchMdicalrecordList(userID,()=>{});
   }
 
-  // renderRows() {
-  //   return this.props.all.map((row, idx) => {
-  //     return (<tr key={idx}>
-  //       <td>{idx+1}</td>
-  //       <td>{row.serial}</td>
-  //       <td><Moment locale="zh-cn" format="lll">{row.createtime}</Moment></td>
-  //       <td>{row.status}</td>
-  //       <td>{row.customer}</td>
-  //       <td>{row.description}</td>
-  //       <td>
-  //         <Link to={`/reimburse/${row.serial}`} >查看</Link>
-  //         <Link to={`/reimburse/${row.serial}`} >{this.biz?"共享":""}</Link>
-  //       </td>
-  //
-  //     </tr>);
-  //   });
-  // }
+  // 查看病历详情时是根据病历的序号做为区别
+  renderRows() {
+      const arraydata = this.props.all.RecordList || []
+    return arraydata.map((item, index) => {
+      return (
+           <tr  key={index} className="test-center">
+            <td> &nbsp;{item.Id}</td>
+            <td> {item.PermissionType}</td>
+            <td><Moment locale="zh-cn" format="lll">{item.Deadline}</Moment></td>
+            <td></td>
+           <td>
+              <Link to={`/detialofours:${item.Id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
+              <Link to={`/share:${item.Id}`}>分享</Link>
+          </td>
+      </tr>);
+    });
+  }
 
   render() {
-      const biz= JSON.parse(localStorage.getItem('biz'));
     return (
       <div className="row">
         <div className="col-xs-12">
@@ -51,23 +47,11 @@ class  Mdicalrecord extends Component {
                   <th>诊疗项目</th>
                   <th>诊断时间</th>
                   <th>医院</th>
-                  <th>医生</th>
-                  <th>描述</th>
+                  {/*<th>医生</th>*/}
+                  {/*<th>描述</th>*/}
                   <th>操作</th>
                 </tr>
-                {/*{ this.renderRows() }*/}
-                {/*<tr className="test-center">*/}
-                  {/*<td> &nbsp;1001</td>*/}
-                  {/*<td> 精神病啊</td>*/}
-                  {/*<td> 2017.9.22</td>*/}
-                  {/*<td> 北京协和医院</td>*/}
-                  {/*<td> 王大锤</td>*/}
-                  {/*<td> 多喝点热水</td>*/}
-                  {/*<td >*/}
-                    {/*<a href="/">查看</a>*/}
-                    {/*<a href="" >{this.biz?"共享":""}</a>*/}
-                  {/*</td>*/}
-                {/*</tr>*/}
+                { this.renderRows()}
                 </tbody>
               </table>
             </div>
@@ -78,10 +62,8 @@ class  Mdicalrecord extends Component {
 }
 
 function mapStateToProps(state) {
-    // console.log(state.mdicalrecord)
   return {
-      all:"hello"
-    // all: state.mdicalrecord.all
+    all: state.mdicalrecordreducer.all
   };
 }
 

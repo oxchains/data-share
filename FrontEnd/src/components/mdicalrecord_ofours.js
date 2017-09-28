@@ -1,49 +1,39 @@
-
-
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchMdicalrecordofours } from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 import Moment from 'react-moment';
-
-
 class  Mdicalrecord extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
+        this.renderRows = this.renderRows.bind(this)
     }
     componentWillMount() {
-        this.props.fetchMdicalrecordofours();
+        const hosptial = "bjxhyy"
+        this.props.fetchMdicalrecordofours(hosptial,()=>{});
     }
-
-    // renderRows() {
-    //   return this.props.all.map((row, idx) => {
-    //     return (<tr key={idx}>
-    //       <td>{idx+1}</td>
-    //       <td>{row.serial}</td>
-    //       <td><Moment locale="zh-cn" format="lll">{row.createtime}</Moment></td>
-    //       <td>{row.status}</td>
-    //       <td>{row.customer}</td>
-    //       <td>{row.description}</td>
-    //       <td>
-    //         <Link to={`/reimburse/${row.serial}`} >查看</Link>
-    //         <Link to={`/reimburse/${row.serial}`} >{this.biz?"共享":""}</Link>
-    //       </td>
-    //
-    //     </tr>);
-    //   });
-    // }
-
-    handlePageClick(data) {
-        let selected = data.selected;
-        this.props.fetchReimburseList(selected + 1);
-    };
-
+    renderRows() {
+        // console.log(this.props.all)
+        const arraydata = this.props.all || []
+        return arraydata.map((item, index) => {
+        return ( <tr  key={index} className="test-center">
+            <td> &nbsp;{item.id}</td>
+            <td> {item.healitem}</td>
+            <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
+            <td>{item.hospital}</td>
+            <td >
+                <Link to={`/detialofours:${item.id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
+            </td>
+        </tr>);
+        });
+    }
     render() {
-        const biz= JSON.parse(localStorage.getItem('biz'));
+        // const array=[
+        //     {num:"1001",title:"精神病啊",time:"2017.9.22",hospital:"北京协和医院",do1:"查看"},
+        //     {num:"1002",title:"良性肿瘤",time:"2015.3.23",hospital:"北京同仁堂医院",do1:"查看"},
+        //     {num:"1003",title:"哮喘病",time:"2016.1.22",hospital:"北京海淀医院",do1:"查看"},
+        // ]
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -57,10 +47,11 @@ class  Mdicalrecord extends Component {
                                     <th>诊疗项目</th>
                                     <th>诊断时间</th>
                                     <th>医院</th>
-                                    <th>医生</th>
-                                    <th>描述</th>
+                                    {/*<th>医生</th>*/}
+                                    {/*<th>描述</th>*/}
                                     <th>操作</th>
                                 </tr>
+                                {this.renderRows()}
                                 </tbody>
                             </table>
                         </div>
@@ -71,11 +62,8 @@ class  Mdicalrecord extends Component {
 }
 
 function mapStateToProps(state) {
-    // console.log(state.mdicalrecord)
     return {
-        all:"hi"
-        // all: state.mdicalrecord.all
+        all: state.mdicalrecordreducer.all
     };
 }
-
 export default connect(mapStateToProps, { fetchMdicalrecordofours })(Mdicalrecord);
