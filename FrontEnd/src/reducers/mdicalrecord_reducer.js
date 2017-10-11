@@ -6,10 +6,10 @@ import {
     FETCH_SEARCH_LIST,
     FETCH_MDICALRECORD_SHARE,
     FETCH_DETIAL_OFOURS,
-    FETCH_REQUEST_LOOK,
+    FETCH_REQUEST_LOOK
 } from '../actions/types';
 
-const INITIAL_STATE = { all: [] };
+const INITIAL_STATE = { all: [] ,data:null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -18,14 +18,18 @@ export default function(state = INITIAL_STATE, action) {
       case FETCH_MDICALRECORDOFOURS_LIST:{
           return { ...state, all:action.payload.data.data };
       }
-      case FETCH_SEARCH_LIST:
-          return { ...state, all:JSON.parse(action.payload.data.data) };
-      case FETCH_NEWS_LIST:
-          return { ...state, all:JSON.parse(action.payload.data.data)};
+      case FETCH_SEARCH_LIST:{
+          return { ...state, all:action.payload.data.data };
+      }
+      case FETCH_NEWS_LIST:{
+          return { ...state, all:action.payload.data.data};
+      }
       case FETCH_MDICALRECORD_SHARE:
           return { ...state, all:JSON.parse(action.payload.data.data)};
-      case FETCH_DETIAL_OFOURS:
-          return { ...state, all:JSON.parse(action.payload.data.data)};
+      case FETCH_DETIAL_OFOURS:{
+          // console.log(action.payload.data.data.recordDetails)
+          return { ...state, data:action.payload.data.data.recordDetails};
+      }
       case FETCH_REQUEST_LOOK:
           return { ...state, all:JSON.parse(action.payload.data.data)};
   }

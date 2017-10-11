@@ -17,13 +17,14 @@ class  Mdicalrecord extends Component {
         // console.log(this.props.all)
         const arraydata = this.props.all || []
         return arraydata.map((item, index) => {
+            console.log(item.id)
         return ( <tr  key={index} className="test-center">
             <td> &nbsp;{item.id}</td>
             <td> {item.healitem}</td>
             <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
             <td>{item.hospital}</td>
             <td >
-                <Link to={`/detialofours:${item.id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
+                <Link to={`/detialofours/${item.id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
             </td>
         </tr>);
         });

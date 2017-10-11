@@ -9,6 +9,7 @@ const logo = 'https://www.oxchains.com/images/logo-black.png';
 class Header extends  Component {
 
   renderUserInfo() {
+      const biz= JSON.parse(localStorage.getItem('biz'));
     if(this.props.authenticated) {
       //const user = JSON.parse(localStorage.getItem('user'));
       const username= localStorage.getItem('username');
@@ -37,7 +38,10 @@ class Header extends  Component {
               </li>
               <li className="user-footer">
                 <div className="pull-left">
-                  <Link href="/selfinfo" className="btn btn-default btn-flat">设置</Link>
+                  <Link className={`btn btn-default btn-flat`} href="#" >设置</Link>
+                  {/*<Link className={`btn btn-default btn-flat`} href="/selfinfo" >设置</Link>*/}
+                  {/*<Link className={`btn btn-default btn-flat ${biz? "hidden" : "show"}`} href="/selfinfo">设置</Link>*/}
+                  {/*<Link className={`btn btn-default btn-flat ${biz? "show" : "hidden"}`} href="#" >设置</Link>*/}
                 </div>
                 <div className="pull-right">
                   <Link href="/signout" className="btn btn-default btn-flat">退出登录</Link>

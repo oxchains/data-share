@@ -1,22 +1,28 @@
 
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { fetchNewsList ,fetchNewsAgree,fetchNewsRefuse} from '../actions/mdicalrecord';
 import { Link } from 'react-router';
 class NewsList extends Component {
   constructor(props) {
-    super(props);
-    this.state = {};
-    this.handleagree = this.handleagree.bind(this)
+      super(props);
+      this.state = {
+          // status:false
+          status : 1
+      };
+      this.handleagree = this.handleagree.bind(this)
       this.handlerefuse = this.handlerefuse.bind(this)
+      this.renderRows = this.renderRows.bind(this)
+
   }
     componentWillMount() {
-      console.log(this.props.all)
-
-        this.props.fetchNewsList({ },()=>{});
+        this.props.fetchNewsList({},()=>{});
   }
   handleagree(){
+      this.setState({
+          // status:true
+          status:2
+      })
       const deadline = "2017-11-08",
           ownerid   = "1234567",
           permissiontype = "permission_share",
@@ -30,33 +36,23 @@ class NewsList extends Component {
         this.props.fetchNewsRefuse({recordid,userid},()=>{});
 
     }
-  // renderRows() {
-  //   return this.props.all.map((row, idx) => {
-  //     return (<tr key={idx}>
-  //       <td>{row.title}</td>
-  //       <td>
-  //         <button onClick={this.handleagree} className="btn-agree" >同意</button>
-  //       </td>
-  //         <td>
-  //             <button className="btn-agree" onClick={this.handleagree} >拒绝</button>
-  //         </td>
-  //     </tr>);
-  //   });
-  // }
     renderRows(){
-        // return this.props.all.map((row, idx) => {
+        const alldata = this.props.all || []
+        return alldata.map((row, idx) => {
             return (
-                <tr>
-                  <td>某某医院申请查看您的某某病历</td>
+                <tr  className={` ${row.status == this.state.status?"":"hidden"}`} key={idx}>
+                  <td className="news_title">{row.providerid}</td>
                   <td className="text-center">
-                    <button onClick={this.handleagree} className="btn-agree" >同意</button>
+                      <button onClick={this.handleagree} className={`btn-agree`} >同意</button>
+                    {/*<button onClick={this.handleagree} className={`btn-agree`} >{this.state.status == false?"同意":"已通过申请"}</button>*/}
                   </td>
-                  <td className="text-center">
-                    <button className="btn-agree" onClick={this.handlerefuse} >拒绝</button>
+                    {/*${this.state.status == true?"hidden":"show"}*/}
+                  <td className={`text-center`} >
+                    <button className={`btn-agree `}  onClick={this.handlerefuse} >拒绝</button>
                   </td>
                 </tr>
             )
-        // })
+        })
     }
 
   render() {

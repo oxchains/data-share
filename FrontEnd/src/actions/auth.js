@@ -16,7 +16,6 @@ import {
  * @returns {Function}
  */
 export function signinAction({username, password, biz}) {
-    console.log("用户类型"+ biz)
   return function(dispatch) {
     axios.post(`${ROOT_URL}/token`, { username, password, biz })
       .then(response => {
@@ -64,12 +63,12 @@ export function signoutUser() {
  * @param callback
  * @returns {Function}
  */
-export function signupUser({ name, mobile, password }, callback) {
-  //console.log(`signupUser: ${username}, ${mobile}, ${password}`);
+export function signupUser({ name, mobile, userrealname,userinfo,usertype,password }, callback) {
+  console.log(`signupUser: ${name}, ${mobile},${userrealname},${userinfo},${usertype}, ${password}`);
   return function(dispatch) {
-    axios.post(`${ROOT_URL}/user`, { name, mobile, password })
+    axios.post(`${ROOT_URL}/user`, { name, mobile,userrealname,userinfo,usertype,password })
       .then(response => {
-
+          console.log(response)
         if(response.data.status == 1) {//singup success
           callback();
         } else {//signup fail

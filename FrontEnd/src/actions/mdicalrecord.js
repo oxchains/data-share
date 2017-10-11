@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import {
   ROOT_URL,
@@ -64,11 +63,10 @@ export function fetchMdicalrecordshare() {
  * 消息通知列表
  */
 export function fetchNewsList() {
-    console.log("消息通知列表数据有了吗")
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/query/getSummary`,{ headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/getMessageData`,{ headers: getAuthorizedHeader() })
             .then(response => {
-                consolel.log("消息通知列表")
+                console.log("消息通知列表")
                 console.log(response)
                 dispatch({ type: FETCH_NEWS_LIST, payload:response })
             })
@@ -110,17 +108,17 @@ export function fetchNewsRefuse({recordid,userid},callback) {
 /**
  * 搜索病人病历结果
  */
-export function fetchMdicalrecordsearch(userid) {
-    console.log(userid)
+export function fetchMdicalrecordsearch(ownerid) {
+    // console.log(ownerid,hospital)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/request/152626199102082135/beijingjingshenbingyiyuan/duziteng3`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/getPatientRecord/${ownerid}`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("搜索病历结果")
                 console.log(response)
                 dispatch({type: FETCH_SEARCH_LIST, payload: response})
 
             })
-            .catch( response => dispatch(requestError(response.data.error)) );
+            .catch( response => dispatch(requestError(response)));
     }
 }
 /**
@@ -131,7 +129,7 @@ export function fetchRequestlook({ownerid,recordid,userid}) {
     return function(dispatch) {
         axios.post(`${ROOT_URL}/chaincodex/request/permission`, {ownerid,recordid,userid},{ headers: getAuthorizedHeader() })
             .then(response => {
-                console.log("申请查看")
+                console.log("申请查看接口通了")
                 console.log(response)
                 dispatch({type: FETCH_REQUEST_LOOK, payload: response})
 
@@ -154,18 +152,18 @@ export function fetchMdicalrecordofours(hosptial) {
                 dispatch({type: FETCH_MDICALRECORDOFOURS_LIST, payload: response})
 
             })
-            .catch( response => dispatch(requestError(response.data.error)) );
+            .catch( response => dispatch(requestError(response.data.error))
+            );
     }
 }
 /**
  * 查看本院de病历详情
  */
 
-export function fetchdetialofours(num,callback) {
-    console.log(num)
-    // const userId= localStorage.getItem('username');
+export function fetchdetialofours(id) {
+    // const id = localStorage.getItem("id")
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/query/152626199102082112`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/getRecordDetails?id=${id}`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("查看本院病历详情")
                 console.log(response)
@@ -183,7 +181,7 @@ export function fetchMdicalrecorddetial(num,callback) {
     console.log(num)
     // const userId= localStorage.getItem('username');
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/query/152626199102082112`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/query/getRecord`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("查看病历详情")
                 console.log(response)

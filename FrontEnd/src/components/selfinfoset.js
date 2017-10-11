@@ -32,10 +32,10 @@ class Selfinfo extends Component {
         });
     };
 
-    handleFormSubmit({ userId, userName, userInfo, userType }) {
+    handleFormSubmit({ userName,userId,  userInfo, userType }) {
         this.setState({ spin:true });
         if(userId && userName && userInfo && userType)
-            this.props.fetchselfinfo({ userId, userName, userInfo,userType }, err => {
+            this.props.fetchselfinfo({ userName,userId,  userInfo,userType }, err => {
                 this.setState({ isModalOpen: true , error: err , actionResult: err||'保存成功!' , spin:false });
             });
     }
@@ -50,7 +50,7 @@ class Selfinfo extends Component {
         }
     }
 
-    renderField({ input, label, type, icon, meta: { touched, error } }) {
+    renderField({ input, label, type, meta: { touched, error } }) {
         return (
             <div className={`form-group has-feedback ${touched && error ? 'has-error' : ''}`}>
                 <input {...input} placeholder={label} type={type} className="form-control"/>
@@ -69,8 +69,8 @@ class Selfinfo extends Component {
                         <p className="login-box-msg" style={{fontSize: 24+'px'}}>个人信息认证</p>
                         {this.renderAlert()}
                         <form className="form-signin" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                            <Field name="userId" component={this.renderField} type="text"  label="真实姓名"  />
-                            <Field name="userName" component={this.renderField} type="text"  label="身份证号码" />
+                            <Field name="userName" component={this.renderField} type="text"  label="真实姓名"  />
+                            <Field name="userId" component={this.renderField} type="text"  label="身份证号码" />
                             <Field name="userInfo" component={this.renderField} type="text" label="用户信息" />
                             <Field name="userType" component={this.renderField} type="text" label="用户类型"  />
                             <div className="row">

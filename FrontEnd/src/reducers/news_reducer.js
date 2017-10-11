@@ -5,7 +5,7 @@ import {
     FETCH_MDICALRECORD_DETIAL,
 } from '../actions/types';
 
-const INITIAL_STATE = { all: [], item: null, reimburseResult: null };
+const INITIAL_STATE = { all: [], message:''};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {

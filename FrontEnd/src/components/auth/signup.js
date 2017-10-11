@@ -28,11 +28,10 @@ class Signup extends Component {
       isModalOpen: false
     });
   };
-
-  handleFormSubmit({ name, mobile, password }) {
+  handleFormSubmit({ name, mobile, userrealname,userinfo,usertype,password }) {
     this.setState({ spin:true });
     if(name && password && mobile)
-      this.props.signupUser({ name, mobile, password }, err => {
+      this.props.signupUser({ name, mobile, userrealname,userinfo,usertype, password }, err => {
         this.setState({ isModalOpen: true , error: err , actionResult: err||'注册成功!' , spin:false });
       });
   }
@@ -68,8 +67,12 @@ class Signup extends Component {
             <p className="login-box-msg" style={{fontSize: 24+'px'}}>用户注册</p>
             {this.renderAlert()}
             <form className="form-signin" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-              <Field name="name" component={this.renderField} type="text"  label="用户名" icon="envelope" />
-              <Field name="mobile" component={this.renderField} type="text"  label="手机号" icon="phone" />
+              <Field name="name" component={this.renderField} type="text"  label="身份证号码"  />
+              <Field name="mobile" component={this.renderField} type="text"  label="手机号"  />
+              <Field name="userrealname" component={this.renderField} type="text"  label="真实姓名"  />
+              {/*<Field name="userId" component={this.renderField} type="text"  label="身份证号码" />*/}
+              <Field name="userinfo" component={this.renderField} type="text" label="用户信息" />
+              <Field name="usertype" component={this.renderField} type="text" label="用户类型"  />
               <Field name="password" component={this.renderField} type="password" label="密码" icon="lock" />
               <Field name="passwordConfirm" component={this.renderField} type="password" label="确认密码" icon="lock" />
               <div className="row">
@@ -115,6 +118,18 @@ const validate = values => {
   if(!values.mobile) {
     errors.mobile = '手机号不能为空';
   }
+    if(!values.userrealname) {
+        errors.userrealname = '真实姓名不能为空';
+    }
+    if(!values.userId) {
+        errors.userId = '身份证号码不能为空';
+    }
+    if(!values.userinfo) {
+        errors.userinfo = '用户信息不能为空';
+    }
+    if(!values.usertype) {
+        errors.usertype = '用户类型不能为空';
+    }
 
   if(!values.password) {
     errors.password = '密码不能为空';

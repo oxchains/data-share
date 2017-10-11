@@ -26,7 +26,7 @@ class  Mdicalrecord extends Component {
             <td><Moment locale="zh-cn" format="lll">{item.Deadline}</Moment></td>
             <td></td>
            <td>
-              <Link to={`/detialofours:${item.Id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
+              <Link to={`/detialofours/${item.Id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
               <Link to={`/share:${item.Id}`}>分享</Link>
           </td>
       </tr>);

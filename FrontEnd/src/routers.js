@@ -29,7 +29,7 @@ export default (
       <Route path="/newslist" component={RequireAuth(NewsList)} />
       <Route path="/allmdicalrecord" component={RequireAuth(Mdicalrecord)} />
       <Route path="/mdicalrecordofours" component={RequireAuth(Mdicalrecordofours)} />
-      <Route path="/detialofours:num" component={RequireAuth(Detialofours)} />
+      <Route path="/detialofours/:id" component={RequireAuth(Detialofours)} />
       {/*<Route path="/detial:num" component={RequireAuth(Detial)} />*/}
       <Route path="/share:num" component={RequireAuth(Share)} />
       <Route path="/selfinfo" component={RequireAuth(Selfinfo)} />
