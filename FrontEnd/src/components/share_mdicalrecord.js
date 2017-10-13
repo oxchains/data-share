@@ -15,25 +15,36 @@ class Search extends Component {
             value:''
         };
     }
+    componentWillMount() {
+        this.props.fetchMdicalrecorddetial(this.props.params.id);
+    }
+    // handleFormSubmit(e){
+    //     e.preventDefault()
+    //     const Inputvalue = this.refs.IDInput.value ;
+    //     const data = this.props.all.hospital;
+    //
+    //     this.props.fetchMdicalrecordshare({Inputvalue},()=>{});
+    // }
+
     handleFormSubmit(e){
         e.preventDefault()
         const Inputvalue = this.refs.IDInput.value ;
-        // const Checkbox =  this.refs.CheckboxInput.value ;
-        this.props.fetchMdicalrecordshare({Inputvalue},()=>{});
-        console.log(Inputvalue)
+        const data = this.props.all;
+        console.log("data")
+        console.log(data.hospital)
+        const ownerid = data.hospital.ownerid
+        const recordid = data.hospital.recordid
+        const providerid = data.hospital.providerid
+        const deadline = data.hospital.deadline
+        const permissionstatus = data.hospital.permissionstatus
+        const healtime = data.hospital.healtime
+        const healailment = data.hospital.healailment
+
+
+        console.log(ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment)
+        this.props.fetchMdicalrecordshare({Inputvalue,ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment},()=>{});
     }
-    // renderrow(item,index){
-    //     return(
-    //         <tr key={index}>
-    //             <td><input type="checkbox" ref="CheckboxInput" value={index + 1}/></td>
-    //             <td>{item.title}</td>
-    //             <td>{item.time}</td>
-    //             <td>
-    //                 <Link to={`/detial:${item.num}`}>{item.do1} &nbsp;&nbsp;&nbsp;</Link>
-    //             </td>
-    //         </tr>
-    //     )
-    // }
+
 
     renderField({ input, label, type, meta: { touched, error } }) {
         return (
@@ -44,47 +55,16 @@ class Search extends Component {
             </div>
         )}
 
-    componentWillMount() {
-        this.props.fetchMdicalrecorddetial();
-    }
-    // renderRow(item,index){
-    //     // console.log(item)
-    //     return (
-    //         <tr key={index} className="list-style">
-    //             <td className="ul-style col-lg-2">姓名: {item.name}</td>
-    //             <td className="ul-style col-lg-2">性别: {item.sex}</td>
-    //             <td className="ul-style col-lg-2">年龄: {item.year} 岁</td>
-    //         </tr>
-    //     )
-    // }
-    handleRow(item,index){
-        return(
-            <tr key={index} className="">
-                <td className="td-left">{item.name}</td>
-                <td className="td-wrap">{item.detial}</td>
-                <td className="td-right"><input type="checkbox" defaultChecked/></td>
-            </tr>
-        )
-    }
 
     render() {
-        // const renderrow =[
-        //     {num:"1001",title:"精神病啊",time:"2017.9.22",hospital:"北京协和医院",do1:"查看"},
-        //     {num:"1002",title:"良性肿瘤",time:"2015.3.23",hospital:"北京同仁堂医院",do1:"查看"},
-        //     {num:"1003",title:"哮喘病",time:"2016.1.22",hospital:"北京海淀医院",do1:"查看"},
-        // ]
+        const alldata  = this.props.all;
         const username= localStorage.getItem('username');
-
-        // const itemRow =[
-        //     {name:"张三三",sex:"女",year:"18"}
-        // ]
-        const linkRow =[
-            {name:"视力",detial:"如果有一天你走进我的心如果"},
-            {name:"视力",detial:"如果有一天你走进我的心如果"},
-            {name:"视力",detial:"如果有一天你走进我的心如果有一天你走进我的心如果有一天你走进我的心如果有一天有一天你走进我的心如果有一天你走进我的心如果有一天你走进我的心如果有一天你走进我的心如果有如果有一天你走进我的心如果有一天你走进我的心如果有一天你走进我的心如果有一天你走进我的心如果有"},
-            {name:"视力",detial:"如果有一天你走进我的心如果"},
-            {name:"视力",detial:"如果有一天你走进我的心如果"},
-        ]
+        if(!alldata)
+        {
+            return (
+                <div><h1>loading...</h1></div>
+            )
+        }else{
         return (<div className="row">
             <div className="col-lg-10 col-lg-offset-2 col-xs-10 col-xs-offset-1">
                 <div className="box box-info">
@@ -92,25 +72,50 @@ class Search extends Component {
                         <form action="" className="text-center form-margintop" onSubmit={this.handleFormSubmit.bind(this)}>
                             <Field name="name" component={this.renderField}  type="text" lable="请输入医院ID" ref="IDInput"/>
                         </form>
+                        {/*<div className="text-center form-margintop">*/}
+                            {/*<input type="text" className="input-search form-control" placeholder="请输入医院ID" ref="IDInput" />*/}
+                            {/*<button className="click-search" onClick={() => this.handleFormSubmit(item)}>共享</button>*/}
+                        {/*</div>*/}
                             <h4>{username} 的病历</h4>
                             <table className="table table-bordered table-hover">
                                 <tbody>
-                                {/*{renderrow.map(this.renderrow)}*/}
-                                {/*<h2>北京协和医院</h2>*/}
-                                {/*{itemRow.map(this.renderRow)}*/}
-                                {/*<div className="clear"></div>*/}
                                 <tr>
-                                    <th className="td-left">项目名称</th>
-                                    <th className="td-wrap">详细信息</th>
-                                    <th className="td-right">操作</th>
+                                    <th>项目名称</th>
+                                    <th>具体内容</th>
+                                    <th>操作</th>
                                 </tr>
-                                {linkRow.map(this.handleRow)}
+                                <tr>
+                                    <td>科室</td>
+                                    <td>{alldata.department}</td>
+                                    <td><input type="checkbox" defaultChecked/></td>
+                                </tr>
+                                <tr>
+                                    <td>姓名</td>
+                                    <td>{alldata.patientname}</td>
+                                    <td><input type="checkbox" defaultChecked/></td>
+                                </tr>
+                                <tr>
+                                    <td>年龄</td>
+                                    <td>{alldata.patientage}</td>
+                                    <td><input type="checkbox" defaultChecked/></td>
+                                </tr>
+                                <tr>
+                                    <td>性别</td>
+                                    <td>{alldata.patientsex}</td>
+                                    <td><input type="checkbox" defaultChecked/></td>
+                                </tr>
+                                <tr>
+                                    <td>详细信息</td>
+                                    <td>{alldata.details}</td>
+                                    <td><input type="checkbox" defaultChecked/></td>
+                                </tr>
+
                                 </tbody>
                             </table>
                     </div>
                 </div>
             </div>
-        </div>);
+        </div>)};
     }
 };
 
@@ -124,11 +129,12 @@ const validate = values => {
 };
 
 function mapStateToProps(state) {
+    // console.log("111")
+    // console.log(state.mdicalrecordreducer.data)
     return {
-        // all: state.news.all,
+        all: state.mdicalrecordreducer.data
     };
 }
-
 const reduxSignupForm = reduxForm({
     form: 'SignForm',
     validate

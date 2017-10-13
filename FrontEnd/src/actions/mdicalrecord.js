@@ -27,14 +27,16 @@ export function requestError(error) {
 export function fetchMdicalrecordList(userID) {
     // console.log(userID)
   return function(dispatch) {
-    axios.get(`${ROOT_URL}/chaincodex/query/${userID}`, { headers: getAuthorizedHeader() })
+    axios.get(`${ROOT_URL}/chaincodex/query/ownerRecord?ownerid=${userID}`,{ headers: getAuthorizedHeader() })
       .then(response => {
           console.log("自己所有病历列表")
         console.log(response)
           dispatch({type: FETCH_MDICALRECORD_LIST, payload: response})
-
       })
-      .catch( response => dispatch(requestError(response.data.error)) );
+      .catch( response => {
+          console.error(response)
+          // dispatch(requestError(response.data.error))
+      });
   }
 }
 
@@ -43,11 +45,10 @@ export function fetchMdicalrecordList(userID) {
  * @param page
  * @returns {Function}
  */
-export function fetchMdicalrecordshare() {
-    // const userId= localStorage.getItem('username');
-    // console.log(userId)
+export function fetchMdicalrecordshare({userid,ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment}) {
+    console.log(`点击共享需要传的数据: ${userid}, ${ownerid}, ${recordid} ,${providerid} ,${deadline},${permissionstatus},${healtime},${healailment}`);
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/query/152626199102082112`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/showShareRecord`, {userid,ownerid,recordid,providerid,deadline, permissionstatus,healtime,healailment},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("自己的病历分享")
                 console.log(response)
@@ -57,8 +58,6 @@ export function fetchMdicalrecordshare() {
             .catch( response => dispatch(requestError(response.data.error)) );
     }
 }
-
-
 /**
  * 消息通知列表
  */
@@ -76,12 +75,12 @@ export function fetchNewsList() {
 /**
  * 消息通知同意
  */
-export function fetchNewsAgree({deadline,ownerid,permissiontype,recordid,userid}) {
-    console.log(`点击同意需要传的数据: ${deadline}, ${ownerid}, ${permissiontype} ,${recordid} ,${userid}`);
+export function fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadline}) {
+    console.log(`点击同意需要传的数据: ${recordid}, ${ownerid}, ${userid} ,${permissiontype} ,${deadline}`);
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/deal`,{deadline,ownerid,permissiontype,recordid,userid}, { headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/deal`,{recordid, ownerid, userid, permissiontype, deadline}, { headers: getAuthorizedHeader() })
             .then(response => {
-                consolel.log("消息通知列表")
+                consolel.log("点击了同意")
                 console.log(response)
                 // dispatch({ type: FETCH_NEWS_AGREE, payload:response })
             })
@@ -91,12 +90,12 @@ export function fetchNewsAgree({deadline,ownerid,permissiontype,recordid,userid}
 /**
  * 消息通知拒绝
  */
-export function fetchNewsRefuse({recordid,userid},callback) {
-    console.log(`点击拒绝需要传的数据: ${recordid}, ${userid}`);
+export function fetchNewsRefuse({recordid, ownerid},callback) {
+    console.log(`点击拒绝需要传的数据: ${recordid}, ${ownerid}`);
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/nodeal`,{recordid,userid}, { headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/nodeal`,{recordid, ownerid}, { headers: getAuthorizedHeader() })
             .then(response => {
-                consolel.log("消息通知列表")
+                consolel.log("点击了拒绝")
                 console.log(response)
                 // dispatch({ type: FETCH_NEWS_REFUSE, payload:response })
             })
@@ -111,7 +110,7 @@ export function fetchNewsRefuse({recordid,userid},callback) {
 export function fetchMdicalrecordsearch(ownerid) {
     // console.log(ownerid,hospital)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/getPatientRecord/${ownerid}`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/searchPatientRecord/${ownerid}`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("搜索病历结果")
                 console.log(response)
@@ -125,9 +124,10 @@ export function fetchMdicalrecordsearch(ownerid) {
  * 申请查看病人病历
  */
 
-export function fetchRequestlook({ownerid,recordid,userid}) {
+export function fetchRequestlook({recordid,ownerid}) {
+    console.log(recordid,ownerid)
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {ownerid,recordid,userid},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {recordid,ownerid},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("申请查看接口通了")
                 console.log(response)
@@ -145,7 +145,7 @@ export function fetchRequestlook({ownerid,recordid,userid}) {
 export function fetchMdicalrecordofours(hosptial) {
     console.log(hosptial)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/getHospitalRecord/${hosptial}`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/queryHospitalRecord`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("本院病历")
                 console.log(response)
@@ -161,12 +161,12 @@ export function fetchMdicalrecordofours(hosptial) {
  */
 
 export function fetchdetialofours(id) {
-    // const id = localStorage.getItem("id")
+
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/getRecordDetails?id=${id}`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/queryRecordDetails?id=${id}`, { headers: getAuthorizedHeader() })
             .then(response => {
-                console.log("查看本院病历详情")
-                console.log(response)
+                // console.log("查看本院病历详情")
+                // console.log(response)
                 dispatch({type: FETCH_DETIAL_OFOURS, payload: response})
 
             })
@@ -174,16 +174,15 @@ export function fetchdetialofours(id) {
     }
 }
 /**
- * 查看病历详情
+ * 查看个人病历详情
  */
 
-export function fetchMdicalrecorddetial(num,callback) {
-    console.log(num)
-    // const userId= localStorage.getItem('username');
+export function fetchMdicalrecorddetial(id) {
+    // console.log(id)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/query/getRecord`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/showShareRecord?id=${id}`, { headers: getAuthorizedHeader() })
             .then(response => {
-                console.log("查看病历详情")
+                console.log("查看个人病历详情")
                 console.log(response)
                 dispatch({type: FETCH_MDICALRECORD_DETIAL, payload: response})
 

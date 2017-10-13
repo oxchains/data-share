@@ -11,23 +11,21 @@ class  Mdicalrecord extends Component {
         this.renderRows = this.renderRows.bind(this)
     }
   componentWillMount() {
-      const userID = "1234567"
+      const userID= localStorage.getItem('username');
     this.props.fetchMdicalrecordList(userID,()=>{});
   }
-
-  // 查看病历详情时是根据病历的序号做为区别
   renderRows() {
-      const arraydata = this.props.all.RecordList || []
+      const arraydata = this.props.all || []
     return arraydata.map((item, index) => {
       return (
            <tr  key={index} className="test-center">
-            <td> &nbsp;{item.Id}</td>
-            <td> {item.PermissionType}</td>
-            <td><Moment locale="zh-cn" format="lll">{item.Deadline}</Moment></td>
-            <td></td>
+            <td> &nbsp;{item.id}</td>
+            <td> {item.healailment}</td>
+            <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
+            <td>{item.providerid}</td>
            <td>
-              <Link to={`/detialofours/${item.Id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
-              <Link to={`/share:${item.Id}`}>分享</Link>
+               <Link to={`/detial/${item.id}`}>查看 &nbsp;&nbsp;&nbsp;</Link>
+               <Link to={`/share/${item.id}`}>分享</Link>
           </td>
       </tr>);
     });
@@ -47,8 +45,6 @@ class  Mdicalrecord extends Component {
                   <th>诊疗项目</th>
                   <th>诊断时间</th>
                   <th>医院</th>
-                  {/*<th>医生</th>*/}
-                  {/*<th>描述</th>*/}
                   <th>操作</th>
                 </tr>
                 { this.renderRows()}

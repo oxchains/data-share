@@ -13,7 +13,7 @@ import Search from './components/search';
 import Mdicalrecord from './components/mdicalrecord';
 import NewsList from './components/news_list';
 import Mdicalrecordofours from './components/mdicalrecord_ofours';
-// import Detial from './components/detial_mdicalrecord';
+import Detial from './components/detial_mdicalrecord';
 import Detialofours from './components/detail_ofours';
 import Share from './components/share_mdicalrecord';
 import Selfinfo from './components/selfinfoset';
@@ -30,8 +30,8 @@ export default (
       <Route path="/allmdicalrecord" component={RequireAuth(Mdicalrecord)} />
       <Route path="/mdicalrecordofours" component={RequireAuth(Mdicalrecordofours)} />
       <Route path="/detialofours/:id" component={RequireAuth(Detialofours)} />
-      {/*<Route path="/detial:num" component={RequireAuth(Detial)} />*/}
-      <Route path="/share:num" component={RequireAuth(Share)} />
+      <Route path="/detial/:id" component={RequireAuth(Detial)} />
+      <Route path="/share/:id" component={RequireAuth(Share)} />
       <Route path="/selfinfo" component={RequireAuth(Selfinfo)} />
 
   </Route>
