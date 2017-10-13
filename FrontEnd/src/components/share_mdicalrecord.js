@@ -28,13 +28,12 @@ class Search extends Component {
 
     handleFormSubmit(e){
         e.preventDefault()
-        const Inputvalue = this.refs.IDInput.value ;
+        const providerid = this.refs.IDInput.value ;
         const data = this.props.all;
         console.log("data")
         console.log(data.hospital)
         const ownerid = data.hospital.ownerid
         const recordid = data.hospital.recordid
-        const providerid = data.hospital.providerid
         const deadline = data.hospital.deadline
         const permissionstatus = data.hospital.permissionstatus
         const healtime = data.hospital.healtime
@@ -42,7 +41,7 @@ class Search extends Component {
 
 
         console.log(ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment)
-        this.props.fetchMdicalrecordshare({Inputvalue,ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment},()=>{});
+        this.props.fetchMdicalrecordshare({ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment},()=>{});
     }
 
 

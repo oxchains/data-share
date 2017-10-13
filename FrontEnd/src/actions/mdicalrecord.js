@@ -45,17 +45,20 @@ export function fetchMdicalrecordList(userID) {
  * @param page
  * @returns {Function}
  */
-export function fetchMdicalrecordshare({userid,ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment}) {
-    console.log(`点击共享需要传的数据: ${userid}, ${ownerid}, ${recordid} ,${providerid} ,${deadline},${permissionstatus},${healtime},${healailment}`);
+export function fetchMdicalrecordshare({ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment}) {
+    console.log(`点击共享需要传的数据: ${ownerid}, ${recordid} ,${providerid} ,${deadline},${permissionstatus},${healtime},${healailment}`);
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/showShareRecord`, {userid,ownerid,recordid,providerid,deadline, permissionstatus,healtime,healailment},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/showShareRecord`, {ownerid,recordid,providerid,deadline, permissionstatus,healtime,healailment},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("自己的病历分享")
                 console.log(response)
                 dispatch({type: FETCH_MDICALRECORD_SHARE, payload: response})
 
             })
-            .catch( response => dispatch(requestError(response.data.error)) );
+            .catch( response => {
+                console.error(response)
+                // dispatch(requestError(response.data.error))
+            });
     }
 }
 /**
