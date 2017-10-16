@@ -5,45 +5,48 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { fetchMdicalrecordshare,fetchMdicalrecorddetial } from '../actions/mdicalrecord';
+import {
+    Modal,
+    ModalHeader,
+    ModalTitle,
+    ModalClose,
+    ModalBody,
+    ModalFooter
+} from 'react-modal-bootstrap';
 
 class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value:''
+            isModalOpen: false,
+            spin : false,
+            error: null,
+            actionResult: ''
         };
     }
     componentWillMount() {
         this.props.fetchMdicalrecorddetial(this.props.params.id);
     }
-    // handleFormSubmit(e){
-    //     e.preventDefault()
-    //     const Inputvalue = this.refs.IDInput.value ;
-    //     const data = this.props.all.hospital;
-    //
-    //     this.props.fetchMdicalrecordshare({Inputvalue},()=>{});
-    // }
-
+    hideModal = () => {
+        this.setState({
+            isModalOpen: false
+        });
+    };
     handleFormSubmit(e){
         e.preventDefault()
-        const providerid = this.refs.IDInput.value ;
         const data = this.props.all;
-        console.log("data")
-        console.log(data.hospital)
+        const userid = data.hospital.ownerid
         const ownerid = data.hospital.ownerid
         const recordid = data.hospital.recordid
         const deadline = data.hospital.deadline
-        const permissionstatus = data.hospital.permissionstatus
+        const permissiontype = data.hospital.permissiontype
         const healtime = data.hospital.healtime
         const healailment = data.hospital.healailment
+        const providerid = this.refs.IDInput.value ;
 
-
-        console.log(ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment)
-        this.props.fetchMdicalrecordshare({ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment},()=>{});
+        this.props.fetchMdicalrecordshare({ownerid,recordid,userid,providerid,deadline,permissiontype,healtime,healailment},()=>{});
     }
-
 
     renderField({ input, label, type, meta: { touched, error } }) {
         return (
@@ -71,10 +74,6 @@ class Search extends Component {
                         <form action="" className="text-center form-margintop" onSubmit={this.handleFormSubmit.bind(this)}>
                             <Field name="name" component={this.renderField}  type="text" lable="请输入医院ID" ref="IDInput"/>
                         </form>
-                        {/*<div className="text-center form-margintop">*/}
-                            {/*<input type="text" className="input-search form-control" placeholder="请输入医院ID" ref="IDInput" />*/}
-                            {/*<button className="click-search" onClick={() => this.handleFormSubmit(item)}>共享</button>*/}
-                        {/*</div>*/}
                             <h4>{username} 的病历</h4>
                             <table className="table table-bordered table-hover">
                                 <tbody>
@@ -114,6 +113,24 @@ class Search extends Component {
                     </div>
                 </div>
             </div>
+
+            <Modal isOpen={this.state.isModalOpen} onRequestHide={this.hideModal}>
+                <ModalHeader>
+                    <ModalClose onClick={this.hideModal}/>
+                    <ModalTitle>提示:</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <p className={this.state.error?'text-red':'text-green'}>
+                        {this.state.actionResult}
+                    </p>
+                </ModalBody>
+                <ModalFooter>
+                    <button className='btn btn-default' onClick={this.hideModal}>
+                        关闭
+                    </button>
+                </ModalFooter>
+            </Modal>
+
         </div>)};
     }
 };
@@ -128,8 +145,6 @@ const validate = values => {
 };
 
 function mapStateToProps(state) {
-    // console.log("111")
-    // console.log(state.mdicalrecordreducer.data)
     return {
         all: state.mdicalrecordreducer.data
     };

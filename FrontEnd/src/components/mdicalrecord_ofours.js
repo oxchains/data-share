@@ -10,7 +10,7 @@ class  Mdicalrecord extends Component {
         this.renderRows = this.renderRows.bind(this)
     }
     componentWillMount() {
-        const hosptial = "bjxhyy"
+        const hosptial =  localStorage.getItem('username');
         this.props.fetchMdicalrecordofours(hosptial,()=>{});
     }
     renderRows() {
@@ -30,11 +30,6 @@ class  Mdicalrecord extends Component {
         });
     }
     render() {
-        // const array=[
-        //     {num:"1001",title:"精神病啊",time:"2017.9.22",hospital:"北京协和医院",do1:"查看"},
-        //     {num:"1002",title:"良性肿瘤",time:"2015.3.23",hospital:"北京同仁堂医院",do1:"查看"},
-        //     {num:"1003",title:"哮喘病",time:"2016.1.22",hospital:"北京海淀医院",do1:"查看"},
-        // ]
         return (
             <div className="row">
                 <div className="col-xs-12">

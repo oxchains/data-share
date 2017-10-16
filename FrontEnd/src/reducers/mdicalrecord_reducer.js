@@ -7,10 +7,12 @@ import {
     FETCH_MDICALRECORD_SHARE,
     FETCH_DETIAL_OFOURS,
     FETCH_REQUEST_LOOK,
-    FETCH_MDICALRECORD_DETIAL
+    FETCH_MDICALRECORD_DETIAL,
+    FETCH_NEWS_AGREE,
+    FETCH_NEWS_REFUSE,
 } from '../actions/types';
 
-const INITIAL_STATE = { all: [] ,data:null};
+const INITIAL_STATE = { all: [] ,data:null,refuse:null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -26,7 +28,7 @@ export default function(state = INITIAL_STATE, action) {
           return { ...state, all:action.payload.data.data};
       }
       case FETCH_MDICALRECORD_SHARE:
-          return { ...state, all:JSON.parse(action.payload.data.data)};
+          return { ...state, all:action.payload.data.data};
       case FETCH_DETIAL_OFOURS:{
           // console.log(action.payload.data.data)
           return { ...state, data:action.payload.data.data};
@@ -35,7 +37,17 @@ export default function(state = INITIAL_STATE, action) {
           return { ...state, data:action.payload.data.data};
       }
       case FETCH_REQUEST_LOOK:
-          return { ...state, all:JSON.parse(action.payload.data.data)};
+          // console.log("reducer")
+          // console.log(action.payload.data.data)
+          return { ...state, data:action.payload.data.data};
+      case FETCH_NEWS_AGREE:
+          // console.log("同意了")
+          console.log(action.payload.data.data)
+      return { ...state, data:action.payload.data.data};
+      case FETCH_NEWS_REFUSE:
+          // console.log("拒绝了")
+          console.log(action.payload.data.data)
+          return { ...state, data:action.payload.data.data};
   }
 
   return state;

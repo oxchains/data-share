@@ -36,12 +36,12 @@ class  Mdicalrecord extends Component {
       <div className="row">
         <div className="col-xs-12">
           <div className="box box-info">
-            <div className="box-header"><h3 className="box-title">病例列表</h3></div>
+            <div className="box-header"><h3 className="box-title">报告列表</h3></div>
             <div className="box-body table-responsive no-padding">
               <table className="table table-bordered table-hover">
                 <tbody>
                 <tr>
-                  <th>病例号</th>
+                  <th>报告序号</th>
                   <th>诊疗项目</th>
                   <th>诊断时间</th>
                   <th>医院</th>

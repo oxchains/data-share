@@ -9,6 +9,9 @@ import {
     FETCH_MDICALRECORD_DETIAL,
     FETCH_DETIAL_OFOURS,
     FETCH_REQUEST_LOOK,
+    FETCH_MDICALRECORD_SHARE,
+    FETCH_NEWS_AGREE,
+    FETCH_NEWS_REFUSE,
   getAuthorizedHeader
 } from './types';
 
@@ -45,10 +48,10 @@ export function fetchMdicalrecordList(userID) {
  * @param page
  * @returns {Function}
  */
-export function fetchMdicalrecordshare({ownerid,recordid,providerid,deadline,permissionstatus,healtime,healailment}) {
-    console.log(`点击共享需要传的数据: ${ownerid}, ${recordid} ,${providerid} ,${deadline},${permissionstatus},${healtime},${healailment}`);
+export function fetchMdicalrecordshare({ownerid,recordid,userid,providerid,deadline,permissiontype,healtime,healailment}) {
+    console.log(`点击共享需要传的数据: ${ownerid}, ${recordid} ,${providerid},${userid} ,${deadline},${permissiontype},${healtime},${healailment}`);
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/showShareRecord`, {ownerid,recordid,providerid,deadline, permissionstatus,healtime,healailment},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/shareRecord`, {ownerid,recordid,userid,providerid,deadline,permissiontype,healtime,healailment},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("自己的病历分享")
                 console.log(response)
@@ -83,9 +86,9 @@ export function fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadl
     return function(dispatch) {
         axios.post(`${ROOT_URL}/chaincodex/deal`,{recordid, ownerid, userid, permissiontype, deadline}, { headers: getAuthorizedHeader() })
             .then(response => {
-                consolel.log("点击了同意")
-                console.log(response)
-                // dispatch({ type: FETCH_NEWS_AGREE, payload:response })
+                // console.log("点击了同意")
+                // console.log(response)
+                dispatch({ type: FETCH_NEWS_AGREE, payload:response })
             })
             .catch( err => dispatch(requestError(err.message)) );
     }
@@ -98,9 +101,9 @@ export function fetchNewsRefuse({recordid, ownerid},callback) {
     return function(dispatch) {
         axios.post(`${ROOT_URL}/chaincodex/nodeal`,{recordid, ownerid}, { headers: getAuthorizedHeader() })
             .then(response => {
-                consolel.log("点击了拒绝")
+                console.log("点击了拒绝")
                 console.log(response)
-                // dispatch({ type: FETCH_NEWS_REFUSE, payload:response })
+                dispatch({ type: FETCH_NEWS_REFUSE, payload:response })
             })
             .catch( err => dispatch(requestError(err.message)) );
     }
@@ -127,17 +130,19 @@ export function fetchMdicalrecordsearch(ownerid) {
  * 申请查看病人病历
  */
 
-export function fetchRequestlook({recordid,ownerid}) {
-    console.log(recordid,ownerid)
+export function fetchRequestlook({ownerid,recordid,requesthospital}) {
+    console.log(`点击申请需要传的数据: ${ownerid}, ${recordid}，${requesthospital}`)
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {recordid,ownerid},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {ownerid,recordid,requesthospital},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("申请查看接口通了")
                 console.log(response)
                 dispatch({type: FETCH_REQUEST_LOOK, payload: response})
-
             })
-            .catch( response => dispatch(requestError(response.data.error)) );
+            .catch( response => {
+                console.error(response)
+                // dispatch(requestError(response.data.error))
+            });
     }
 }
 
@@ -148,7 +153,7 @@ export function fetchRequestlook({recordid,ownerid}) {
 export function fetchMdicalrecordofours(hosptial) {
     console.log(hosptial)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/queryHospitalRecord`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/queryHospitalRecord/${hosptial}`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("本院病历")
                 console.log(response)

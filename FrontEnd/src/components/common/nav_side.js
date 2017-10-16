@@ -10,12 +10,12 @@ class NavSide extends  Component {
       const biz= JSON.parse(localStorage.getItem('biz'));
       if(biz) {
         return [
-          <li key="nav5"><Link href="/search"><i className="fa fa-ticket"></i> <span>搜索病历</span></Link></li>,
-          <li key="nav6"><Link href="/mdicalrecordofours"><i className="fa fa-tasks"></i> <span>本院病历</span></Link></li>,
+          <li key="nav5"><Link href="/search"><i className="fa fa-ticket"></i> <span>搜索体检报告</span></Link></li>,
+          <li key="nav6"><Link href="/mdicalrecordofours"><i className="fa fa-tasks"></i> <span>本院体检报告</span></Link></li>,
         ];
       } else {
         return [
-         <li key="nav7"><Link href="/allmdicalrecord"><i className="fa fa-list-alt"></i> <span>所有病例</span></Link></li>,
+         <li key="nav7"><Link href="/allmdicalrecord"><i className="fa fa-list-alt"></i> <span>所有体检报告</span></Link></li>,
           <li key="nav8"><Link href="/newslist"><i className="fa fa-list"></i> <span>消息通知</span></Link></li>
         ];
       }

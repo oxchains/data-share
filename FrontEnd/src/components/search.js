@@ -20,28 +20,20 @@ class Search extends Component {
     handleFormSubmit(e){
       e.preventDefault()
         const Inputvalue= this.refs.IDInput.value ;
-       localStorage.setItem("Inputvalue",Inputvalue)
+       // localStorage.setItem("Inputvalue",Inputvalue)
         this.props.fetchMdicalrecordsearch(Inputvalue,()=>{});
     }
-    // handleChange(){
-    //     const ownerid= localStorage.getItem("Inputvalue")
-    //     const alldata = this.props.all || [];
-    //     alldata.map((item,index) =>{
-    //         const  recordid = item.recordid
-    //         localStorage.setItem("recordid",recordid)
-    //     })
-    //
-    //     const recordid= localStorage.getItem("recordid")
-    //     this.props.fetchRequestlook({ownerid,recordid},()=>{});
-    // }
-    handleChange = (item) => {
-        const ownerid= localStorage.getItem("Inputvalue")
+    handleChange = (item) =>{
+        console.log(item)
+        const ownerid=  this.refs.IDInput.value ;
+        const requesthospital = localStorage.getItem('username')
         const {recordid}  = item
-        this.props.fetchRequestlook({ownerid,recordid},()=>{});
+        this.props.fetchRequestlook({ownerid,recordid,requesthospital},()=>{});
     }
-
     renderRows() {
         const alldata = this.props.all || [];
+        const userid =localStorage.getItem('username')
+        console.log(userid)
         return alldata.map((item, index) => {
             return (
                 <tr  key={index} className="test-center">
@@ -49,9 +41,9 @@ class Search extends Component {
                   <td> {item.healailment}</td>
                   <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
                   <td>
-                      <Link className={`font-color  ${item.permissionstatus == 1? " " : "hidden"} `}>等待验证</Link>
-                    <Link className={`font-color  ${item.permissionstatus == 2? " " : "hidden"} `} to={`/detialofours/${item.id}`}>查看</Link>
-                    <Link className={`font-color  ${item.permissionstatus == 0? " " : "hidden"} `} onClick={this.handlechange}>申请查看</Link>
+                      <Link className={`font-color  ${item.tempStatus == 1? " " : "hidden"} `}>等待验证</Link>
+                      <Link className={`font-color  ${item.tempStatus == 2? " " : "hidden"} `} to={`/detialofours/${item.id}`}>查看</Link>
+                      <Link className={`font-color  ${item.tempStatus == 0? " " : "hidden"} `} onClick={() => this.handleChange(item)}>申请查看</Link>
                   </td>
                 </tr>);
         });
@@ -87,9 +79,11 @@ class Search extends Component {
   }
 };
 function mapStateToProps(state) {
-    console.log(state.mdicalrecordreducer.all)
+    // console.log("222")
+    console.log(state.mdicalrecordreducer.data)
     return {
-        all: state.mdicalrecordreducer.all
+        all: state.mdicalrecordreducer.all,
+        data:state.mdicalrecordreducer.data
     };
 }
 export default connect(mapStateToProps,{fetchMdicalrecordsearch,fetchRequestlook})(Search);

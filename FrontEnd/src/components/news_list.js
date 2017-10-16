@@ -8,30 +8,12 @@ class NewsList extends Component {
       super(props);
       this.state = {
       };
-      // this.handleagree = this.handleagree.bind(this)
-      // this.handlerefuse = this.handlerefuse.bind(this)
       this.renderRows = this.renderRows.bind(this)
 
   }
     componentWillMount() {
         this.props.fetchNewsList({},()=>{});
   }
-  // handleAgree(){
-  //     const alldata = this.props.all || []
-  //     alldata.map((item,index) =>{
-  //         localStorage.setItem("recordId",item.recordid)
-  //         localStorage.setItem("ownerId",item.ownerid)
-  //         localStorage.setItem("userId",item.providerid)
-  //         localStorage.setItem("permissionType",item.permissiontype)
-  //         localStorage.setItem("deadline",item.deadline)
-  //     })
-  //     const recordid        =  localStorage.getItem("recordId")
-  //     const  ownerid        =  localStorage.getItem("ownerId")
-  //     const  userid         =  localStorage.getItem("userId")
-  //     const  permissiontype =  localStorage.getItem("permissionType")
-  //     const  deadline       =  localStorage.getItem("deadline")
-  //     this.props.fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadline},()=>{});
-  // }
     handleAgree = (item) =>{
       console.log(item)
         const {recordid, ownerid, userid, permissiontype, deadline} = item
@@ -47,7 +29,7 @@ class NewsList extends Component {
         return alldata.map((item, idx) => {
             return (
                 <tr  className={`${item.permissionstatus == 1?"":"hidden"}`}  key={idx}>
-                  <td className="news_title">{item.providerid} 请求查看 {item.recordid}</td>
+                  <td className="news_title">{item.requesthospital} 请求查看 {item.recordid}</td>
                   <td className="text-center">
                       <button onClick={() => this.handleAgree(item)} className={`btn-agree`} >同意</button>
                   </td>
