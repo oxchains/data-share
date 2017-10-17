@@ -112,7 +112,7 @@
         2.检查本地permissionList是否已有相应数据数据存在
         3.检查权限列表中是否以存在userid
         4.添加权限(record)
-        4.更新追加的id中对应的UserSummary
+        4.更新追加的id中对应的UserSummary(用户摘要)
 
     //数据所有者移除部分用户权限
     4.removePermission(recordId, ownerId, userId)
@@ -158,7 +158,7 @@
         2.判断user是否含有相应权限
         3.返回结果
 
-    //A（数据请求者）判断自己是否用某条记录的权限
+    //A（数据请求者）判断自己是否拥有某条记录的权限
     9.havePermissionUser(recordId, userId)
         recordid:记录id
         userid:用户id

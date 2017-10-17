@@ -1,4 +1,4 @@
-package com.oxchains.mdsc.domain;
+package com.oxchains.mdsc.rest.domain;
 
 public class PatientData {
     private String Item;

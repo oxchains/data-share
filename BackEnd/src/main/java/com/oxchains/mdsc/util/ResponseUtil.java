@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
- * @author aiet
+ * @author Luo_xuri
  */
 public class ResponseUtil {
 

@@ -166,11 +166,38 @@
       <artifactId>groovy-all</artifactId>
     </dependency>
 
-
     <dependency>
       <groupId>org.hyperledger.fabric-sdk-java</groupId>
       <artifactId>fabric-sdk-java</artifactId>
       <version>${fabric-sdk-java.version}</version>
+    </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+      </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.8.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>spring-mock-mvc</artifactId>
+      <version>3.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.serenity-bdd</groupId>
+      <artifactId>serenity-jbehave</artifactId>
+      <version>1.26.0-rc.3</version>
+    </dependency>
+    <dependency>
+      <groupId>net.serenity-bdd</groupId>
+      <artifactId>serenity-core</artifactId>
+      <version>1.4.1-rc.7</version>
     </dependency>
 
   </dependencies>

@@ -10,27 +10,47 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+
+/**
+ * @author aiet
+ */
 @EnableWebSecurity
 @Configuration
 public class AppConfiguration extends WebSecurityConfigurerAdapter {
 
-//    private final JwtTokenFilter jwtTokenFilter;
-//    private final AuthError authError;
+    private final JwtTokenFilter jwtTokenFilter;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final AuthError authError;
 
-    public AppConfiguration(@Autowired JwtAuthenticationProvider jwtAuthenticationProvider) {
-//        this.jwtTokenFilter = jwtTokenFilter;
-//        this.authError = authError;
+    public AppConfiguration(@Autowired JwtTokenFilter jwtTokenFilter, @Autowired JwtAuthenticationProvider jwtAuthenticationProvider, @Autowired AuthError authError) {
+        this.jwtTokenFilter = jwtTokenFilter;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+        this.authError = authError;
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/", "/chaincode").permitAll();
+        http
+          .cors()
+          .and()
+          .csrf()
+          .disable()
+          .authorizeRequests()
+          .antMatchers("/token", "/token/research", "/user", "/company", "/research", "/chaincodex/**/*")
+          .permitAll()
+          .antMatchers("/**/*")
+          .authenticated()
+
+          .and()
+          .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+          .exceptionHandling()
+          .authenticationEntryPoint(authError)
+          .accessDeniedHandler(authError);
     }
 
     @Override
@@ -47,10 +67,10 @@ public class AppConfiguration extends WebSecurityConfigurerAdapter {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry
-                        .addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE")
-                        .allowedHeaders("*");
+                  .addMapping("/**")
+                  .allowedOrigins("*")
+                  .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE")
+                  .allowedHeaders("*");
             }
         };
     }

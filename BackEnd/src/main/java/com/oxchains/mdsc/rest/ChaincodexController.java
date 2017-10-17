@@ -1,17 +1,21 @@
 package com.oxchains.mdsc.rest;
 
 import com.google.gson.Gson;
-import com.oxchains.mdsc.domain.PatientData;
-import com.oxchains.mdsc.domain.RestResp;
+import com.oxchains.mdsc.auth.JwtAuthentication;
+import com.oxchains.mdsc.data.CompanyUserRepo;
+import com.oxchains.mdsc.data.UserRepo;
+import com.oxchains.mdsc.domain.*;
+import com.oxchains.mdsc.rest.domain.PatientData;
+import com.oxchains.mdsc.rest.domain.RestResp;
 import com.oxchains.mdsc.service.MdscxService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.hql.internal.ast.tree.RestrictableStatement;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 /**
  *  ownerId  患者
@@ -25,44 +29,58 @@ public class ChaincodexController {
     @Resource
     private MdscxService mdscxService;
 
-    @PostMapping
-    public RestResp reginster(@RequestParam String userId, String userName, String userInfo, String userType) {
-        return mdscxService.register(userId, userName, userInfo, userType);
+    private Optional<User> userContext(){
+        return ((JwtAuthentication) getContext().getAuthentication()).user();
     }
 
-    //TODO
-    // patientInfo 需要修改
-    @PutMapping(value = "/add/{ownerId}")
-    public RestResp addRecord(@PathVariable("ownerId") String ownerId, String recordId, String providerId, String accessInfo, String patientInfo, String datahash) {
-        if (patientInfo != null) patientInfo = patientInfo.replace(",", "__");
-        return mdscxService.addRecord(recordId, ownerId, providerId, accessInfo, patientInfo, datahash);
+    @PostMapping(value = "/register")
+    public RestResp register(@RequestBody Hospital hospital) {
+        return mdscxService.register(hospital);
     }
 
-    @PutMapping(value = "/add/{ownerId}/{recordId}")
-    public RestResp addPermission(@PathVariable("ownerId") String ownerId,
-                                  @PathVariable("recordId") String recordId,
-                                  String userId, String permissionType, String deadline) {
-        return mdscxService.addPermission(recordId, ownerId, userId, permissionType, deadline);
+    // 两种注册绑定到一块
+    public RestResp bindRegister_user(User user) {
+        return mdscxService.bindRegister_user(user);
     }
 
-    @PutMapping(value = "/remove/{ownerId}/{recordId}/{userId}")
-    public RestResp removePermission(@PathVariable("ownerId") String ownerId,
-                                     @PathVariable("recordId") String recordId,
-                                     @PathVariable("userId") String userId) {
-        return mdscxService.removePermission(recordId, ownerId, userId);
+    // 两种注册绑定到一块
+    public RestResp bindRegister_company(CompanyUser companyUser) {
+        return mdscxService.bindRegister_company(companyUser);
     }
 
-    @PutMapping(value = "/update/{providerId}/{recordId}")
-    public RestResp updateAccessInfo(@PathVariable("providerId") String providerId,
-                                     @PathVariable("recordId") String recordId,
-                                     String accessInfo) {
-        return mdscxService.updateAccessInfo(recordId, providerId, accessInfo);
+    // 第三方研究机构
+    public RestResp bindRegister_research(Research research) {
+        return mdscxService.bindRegister_research(research);
     }
 
-    @GetMapping(value = "/query/{userId}/{recordId}")
-    public RestResp getRecord(@PathVariable("userId") String userId,
-                              @PathVariable("recordId") String recordId) {
-        return mdscxService.getRecord(recordId, userId);
+    @PutMapping(value = "/addRecord")
+    public RestResp addRecord(@RequestBody Hospital hospital) {
+        String patientInfo = hospital.getPatientinfo();
+        if(patientInfo != null) {
+            patientInfo = patientInfo.replace(",","__");
+        }
+        return mdscxService.addRecord(hospital);
+    }
+
+
+    @PutMapping(value = "/addPermission")
+    public RestResp addPermission(@RequestBody Hospital hospital) {
+        return mdscxService.addPermission(hospital);
+    }
+
+    @PutMapping(value = "/removePermission")
+    public RestResp removePermission(@RequestBody Hospital hospital) {
+        return mdscxService.removePermission(hospital);
+    }
+
+    @PutMapping(value = "/updateAccessInfo")
+    public RestResp updateAccessInfo(@RequestBody Hospital hospital) {
+        return mdscxService.updateAccessInfo(hospital);
+    }
+
+    @PostMapping(value = "/query/getRecord")
+    public RestResp getRecord(@RequestBody Hospital hospital) {
+        return mdscxService.getRecord(hospital);
     }
 
     @GetMapping(value = "/query/{userId}")
@@ -70,29 +88,23 @@ public class ChaincodexController {
         return mdscxService.getSummary(userId);
     }
 
-    @GetMapping(value = "/check/{providerId}/{recordId}/{userId}")
-    public RestResp havePermissionProvider(@PathVariable("providerId") String providerId, @PathVariable("recordId") String recordId,
-                                           @PathVariable("userId") String userId) {
-        return mdscxService.havePermissionProvider(recordId, providerId, userId);
+    @PostMapping(value = "/check/havePermissionProvider")
+    public RestResp havePermissionProvider(@RequestBody Hospital hospital) {
+        return mdscxService.havePermissionProvider(hospital);
     }
 
-    @GetMapping(value = "/check/{userId}/{recordId}")
-    public RestResp havePermissionUser(@PathVariable("userId") String userId,
-                                       @PathVariable("recordId") String recordId) {
+    @GetMapping(value = "/check/havePermissionUser")
+    public RestResp havePermissionUser(@RequestParam String recordId, @RequestParam String userId) {
         return mdscxService.havePermissionUser(recordId, userId);
     }
 
-    @PutMapping(value = "/buy/{userId}/{recordId}")
-    public RestResp buyForRecord(@PathVariable("userId") String userId,
-                                 @PathVariable("recordId") String recordId,
-                                 String deadline) {
-        return mdscxService.buyForRecord(recordId, userId, deadline);
+    @PutMapping(value = "/buy/record")
+    public RestResp buyForRecord(@RequestBody Hospital hospital) {
+        return mdscxService.buyForRecord(hospital);
     }
 
-    @PutMapping(value = "/set/{owerId}/{recordId}")
-    public RestResp setShareItem(@PathVariable("owerId") String owerId,
-                                 @PathVariable("recordId") String recordId,
-                                 String patientdata) {
+    @PutMapping(value = "/set/shareItem")
+    public RestResp setShareItem(@RequestBody Hospital hospital) {
 
         List<PatientData> patientdatas = new ArrayList<>();
 
@@ -104,6 +116,67 @@ public class ChaincodexController {
         map.put("age", new PatientData("age", true, 121));
         Gson gson = new Gson();
         //patientdata=gson.toJson(map);
-        return mdscxService.setShareItem(recordId, owerId, patientdata);
+        return mdscxService.setShareItem(hospital);
     }
+
+    // 请求权限
+    @PostMapping(value = "/request/permission")
+    public RestResp requestPermission(@RequestBody Hospital hospital) {
+        return mdscxService.requestPermission(hospital);
+    }
+
+    // 处理请求
+    @PostMapping(value = "/deal")
+    public RestResp solveRequest(@RequestBody Hospital hospital){
+        return mdscxService.solveRequest(hospital);
+    }
+
+    // 不处理请求
+    @PostMapping(value = "/nodeal")
+    public RestResp noSolveRequest(@RequestBody Hospital hospital){
+        return mdscxService.noSolveRequest(hospital);
+    }
+
+    // 医院查看自己医院的病历
+    @GetMapping(value = "/queryHospitalRecord/{providerid}")
+    public RestResp getHospitalRecord(@PathVariable String providerid) {
+        return mdscxService.getHospitalRecord(providerid);
+    }
+
+    // 医院自己的id和用户的id获取病例信息-搜索
+    @GetMapping(value = "/searchPatientRecord/{ownerid}/{loginname}")
+    public RestResp searchPatientRecord(@PathVariable String ownerid, @PathVariable String loginname){
+        return mdscxService.searchPatientRecord(ownerid, loginname);
+    }
+
+    // 消息通知页面获取数据
+    @GetMapping(value = "/getMessageData/{ownerid}")
+    public RestResp getData(@PathVariable String ownerid){
+        return mdscxService.getData(ownerid);
+    }
+
+    // 医院点击记录查看详细
+    @GetMapping(value = "/queryRecordDetails")
+    public RestResp queryRecordDetails(@RequestParam Long id){
+        return mdscxService.queryRecordDetails(id);
+    }
+
+    // 病人系统，点击共享he查看，显示详细，选择给某个医院共享
+    @GetMapping(value = "/showShareRecord")
+    public RestResp showShareRecord(@RequestParam Long id){
+        return mdscxService.showShareRecord(id);
+    }
+
+    // 个人查看自己的病历列表，无视权限，只要是自己的ownerid就可以查看
+    @GetMapping(value = "/query/ownerRecord")
+    public RestResp queryOwnerRecord(@RequestParam String ownerid){
+        return mdscxService.queryOwnerRecord(ownerid);
+    }
+
+    // 病人系统点击共享进入详细之后点击“共享”按钮
+    @PostMapping("/shareRecord")
+    public RestResp shareRecord(@RequestBody Hospital hospital){
+        return mdscxService.shareRecord(hospital);
+    }
+
 }

@@ -1,18 +1,14 @@
 package com.oxchains.mdsc.rest;
 
 import com.google.gson.Gson;
-import com.oxchains.mdsc.domain.ChaincodeResp;
-import com.oxchains.mdsc.domain.PatientData;
-import com.oxchains.mdsc.domain.RestResp;
-import com.oxchains.mdsc.service.ChaincodeService;
+import com.oxchains.mdsc.rest.domain.PatientData;
+import com.oxchains.mdsc.rest.domain.RestResp;
 import com.oxchains.mdsc.service.MdscService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/chaincode")

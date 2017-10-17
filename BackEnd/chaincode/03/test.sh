@@ -88,7 +88,10 @@ instantiateChaincode
 
 echo "chaincodeInvoke"
 
-chaincodeInvoke '{"Args":["register","hospital_1","医院1","甲级医院","user_hospital"]}'
+chaincodeInvoke '{"Args":["register","hospital11_1","医院1","甲级医院","user_hospital"]}'
+具体在链上的操作如下：
+docker exec -it peer0.org1.example.com bash
+peer chaincode invoke -C mychannel -o orderer.example.com:7050 -n hospital1 -c '{"Args":["register","hospital11_1","channel1","channel","user_hospital"]}'
 
 chaincodeInvoke '{"Args":["register","hospital_2","医院2","乙级医院","user_hospital"]}'
 

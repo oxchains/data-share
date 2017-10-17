@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/data-share.iml" filepath="$PROJECT_DIR$/data-share.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/docs/dubbo-provider/src/main/main.iml" filepath="$USER_HOME$/Desktop/docs/dubbo-provider/src/main/main.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/docs/dubbo-provider/src/test/test.iml" filepath="$USER_HOME$/Desktop/docs/dubbo-provider/src/test/test.iml" />
     </modules>
   </component>
 </project>

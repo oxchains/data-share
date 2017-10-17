@@ -1,7 +1,7 @@
 package com.oxchains.mdsc.service;
 
-import com.oxchains.mdsc.domain.ChaincodeResp;
-import com.oxchains.mdsc.domain.FabricAccount;
+import com.oxchains.mdsc.rest.domain.ChaincodeResp;
+import com.oxchains.mdsc.rest.domain.FabricAccount;
 import com.oxchains.mdsc.util.ConstantUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

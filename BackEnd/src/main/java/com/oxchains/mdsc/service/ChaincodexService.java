@@ -1,7 +1,7 @@
 package com.oxchains.mdsc.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.oxchains.mdsc.domain.RestResp;
+import com.oxchains.mdsc.rest.domain.RestResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +12,7 @@ import oxchains.fabric.console.service.ChaincodesService;
 
 import java.util.Optional;
 
-import static com.oxchains.mdsc.domain.RestResp.fail;
+import static com.oxchains.mdsc.rest.domain.RestResp.fail;
 
 @Service
 public class ChaincodexService {
@@ -52,6 +52,7 @@ public class ChaincodexService {
                 return fail("操作失败", result);
             }
         }).orElse(fail("操作失败"));
+
     }
 
     public RestResp query(String... args) {
@@ -62,7 +63,6 @@ public class ChaincodexService {
                 return fail("获取数据失败");
             }
         }).orElse(fail("获取数据失败"));
-        //return querycc(chain,chaincode,chaincodeVersion,args).map(RestResp::success).orElse(fail());
 
     }
 

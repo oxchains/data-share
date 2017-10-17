@@ -1,4 +1,4 @@
-package com.oxchains.mdsc.domain;
+package com.oxchains.mdsc.rest.domain;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 

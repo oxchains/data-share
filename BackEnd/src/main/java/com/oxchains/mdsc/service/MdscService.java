@@ -1,7 +1,7 @@
 package com.oxchains.mdsc.service;
 
-import com.oxchains.mdsc.domain.ChaincodeResp;
-import com.oxchains.mdsc.domain.RestResp;
+import com.oxchains.mdsc.rest.domain.ChaincodeResp;
+import com.oxchains.mdsc.rest.domain.RestResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
