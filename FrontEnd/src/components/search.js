@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { fetchMdicalrecordsearch ,fetchRequestlook} from '../actions/mdicalrecord';
@@ -19,21 +19,22 @@ class Search extends Component {
 
     handleFormSubmit(e){
       e.preventDefault()
-        const Inputvalue= this.refs.IDInput.value ;
-       // localStorage.setItem("Inputvalue",Inputvalue)
-        this.props.fetchMdicalrecordsearch(Inputvalue,()=>{});
+        const ownerid= this.refs.IDInput.value ;
+        const loginname =localStorage.getItem('username')
+
+        this.props.fetchMdicalrecordsearch({ownerid,loginname},()=>{});
     }
     handleChange = (item) =>{
         console.log(item)
-        const ownerid=  this.refs.IDInput.value ;
-        const requesthospital = localStorage.getItem('username')
+        // const ownerid=  this.refs.IDInput.value ;
+        const providerid = localStorage.getItem('username')
         const {recordid}  = item
-        this.props.fetchRequestlook({ownerid,recordid,requesthospital},()=>{});
+        this.props.fetchRequestlook({recordid,providerid},()=>{});
     }
     renderRows() {
         const alldata = this.props.all || [];
         const userid =localStorage.getItem('username')
-        console.log(userid)
+        console.log("登录名"+userid)
         return alldata.map((item, index) => {
             return (
                 <tr  key={index} className="test-center">
@@ -42,7 +43,7 @@ class Search extends Component {
                   <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
                   <td>
                       <Link className={`font-color  ${item.tempStatus == 1? " " : "hidden"} `}>等待验证</Link>
-                      <Link className={`font-color  ${item.tempStatus == 2? " " : "hidden"} `} to={`/detialofours/${item.id}`}>查看</Link>
+                      <Link className={`font-color  ${item.tempStatus == 2? " " : "hidden"}   `} to={`/detialofours/${item.id}`}>查看</Link>
                       <Link className={`font-color  ${item.tempStatus == 0? " " : "hidden"} `} onClick={() => this.handleChange(item)}>申请查看</Link>
                   </td>
                 </tr>);

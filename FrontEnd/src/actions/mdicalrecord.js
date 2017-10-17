@@ -67,9 +67,10 @@ export function fetchMdicalrecordshare({ownerid,recordid,userid,providerid,deadl
 /**
  * 消息通知列表
  */
-export function fetchNewsList() {
+export function fetchNewsList(ownerid) {
+    console.log(ownerid)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/getMessageData`,{ headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/getMessageData/${ownerid}`,{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("消息通知列表")
                 console.log(response)
@@ -86,8 +87,8 @@ export function fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadl
     return function(dispatch) {
         axios.post(`${ROOT_URL}/chaincodex/deal`,{recordid, ownerid, userid, permissiontype, deadline}, { headers: getAuthorizedHeader() })
             .then(response => {
-                // console.log("点击了同意")
-                // console.log(response)
+                console.log("点击了同意")
+                console.log(response)
                 dispatch({ type: FETCH_NEWS_AGREE, payload:response })
             })
             .catch( err => dispatch(requestError(err.message)) );
@@ -113,10 +114,11 @@ export function fetchNewsRefuse({recordid, ownerid},callback) {
 /**
  * 搜索病人病历结果
  */
-export function fetchMdicalrecordsearch(ownerid) {
+export function fetchMdicalrecordsearch({ownerid,loginname}) {
+    console.log(`点击搜索需要传的数据: ${ownerid},${loginname}`)
     // console.log(ownerid,hospital)
     return function(dispatch) {
-        axios.get(`${ROOT_URL}/chaincodex/searchPatientRecord/${ownerid}`, { headers: getAuthorizedHeader() })
+        axios.get(`${ROOT_URL}/chaincodex/searchPatientRecord/${ownerid}/${loginname}`, { headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("搜索病历结果")
                 console.log(response)
@@ -130,10 +132,10 @@ export function fetchMdicalrecordsearch(ownerid) {
  * 申请查看病人病历
  */
 
-export function fetchRequestlook({ownerid,recordid,requesthospital}) {
-    console.log(`点击申请需要传的数据: ${ownerid}, ${recordid}，${requesthospital}`)
+export function fetchRequestlook({recordid,providerid}) {
+    console.log(`点击申请需要传的数据: ${recordid},${providerid}`)
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {ownerid,recordid,requesthospital},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {recordid,providerid},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("申请查看接口通了")
                 console.log(response)

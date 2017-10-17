@@ -9,12 +9,13 @@ class NewsList extends Component {
       this.state = {
       };
       this.renderRows = this.renderRows.bind(this)
-
   }
     componentWillMount() {
-        this.props.fetchNewsList({},()=>{});
+        const ownerid= localStorage.getItem('username');
+        this.props.fetchNewsList(ownerid,()=>{});
   }
     handleAgree = (item) =>{
+      console.log("2121")
       console.log(item)
         const {recordid, ownerid, userid, permissiontype, deadline} = item
         this.props.fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadline},()=>{});
@@ -28,8 +29,8 @@ class NewsList extends Component {
         console.log(alldata)
         return alldata.map((item, idx) => {
             return (
-                <tr  className={`${item.permissionstatus == 1?"":"hidden"}`}  key={idx}>
-                  <td className="news_title">{item.requesthospital} 请求查看 {item.recordid}</td>
+                <tr  className={`${item.tempStatus == 1?"":"hidden"}`}  key={idx}>
+                  <td className="news_title">{item.requestproviderid} 请求查看 {item.recordid}</td>
                   <td className="text-center">
                       <button onClick={() => this.handleAgree(item)} className={`btn-agree`} >同意</button>
                   </td>
