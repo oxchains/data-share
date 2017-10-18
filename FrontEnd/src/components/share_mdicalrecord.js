@@ -36,7 +36,7 @@ class Search extends Component {
     handleFormSubmit(e){
         e.preventDefault()
         const data = this.props.all;
-        const userid = data.hospital.ownerid
+        const userid = this.refs.IDInput.value
         const ownerid = data.hospital.ownerid
         const recordid = data.hospital.recordid
         const deadline = data.hospital.deadline
