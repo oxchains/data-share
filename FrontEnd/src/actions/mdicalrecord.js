@@ -132,10 +132,10 @@ export function fetchMdicalrecordsearch({ownerid,loginname}) {
  * 申请查看病人病历
  */
 
-export function fetchRequestlook({recordid,providerid}) {
-    console.log(`点击申请需要传的数据: ${recordid},${providerid}`)
+export function fetchRequestlook({recordid,loginid}) {
+    console.log(`点击申请需要传的数据: ${recordid},${loginid}`)
     return function(dispatch) {
-        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {recordid,providerid},{ headers: getAuthorizedHeader() })
+        axios.post(`${ROOT_URL}/chaincodex/request/permission`, {recordid,loginid},{ headers: getAuthorizedHeader() })
             .then(response => {
                 console.log("申请查看接口通了")
                 console.log(response)

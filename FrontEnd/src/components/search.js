@@ -27,9 +27,9 @@ class Search extends Component {
     handleChange = (item) =>{
         console.log(item)
         // const ownerid=  this.refs.IDInput.value ;
-        const providerid = localStorage.getItem('username')
+        const loginid = localStorage.getItem('username')
         const {recordid}  = item
-        this.props.fetchRequestlook({recordid,providerid},()=>{});
+        this.props.fetchRequestlook({recordid,loginid},()=>{});
     }
     renderRows() {
         const alldata = this.props.all || [];
@@ -42,9 +42,9 @@ class Search extends Component {
                   <td> {item.healailment}</td>
                   <td><Moment locale="zh-cn" format="lll">{item.healtime}</Moment></td>
                   <td>
-                      <Link className={`font-color  ${item.tempStatus == 1? " " : "hidden"} `}>等待验证</Link>
-                      <Link className={`font-color  ${item.tempStatus == 2? " " : "hidden"}   `} to={`/detialofours/${item.id}`}>查看</Link>
-                      <Link className={`font-color  ${item.tempStatus == 0? " " : "hidden"} `} onClick={() => this.handleChange(item)}>申请查看</Link>
+                      <Link className={`font-color  ${item.status.permissionstatus == 1? " " : "hidden"}  `}>等待验证</Link>
+                      <Link className={`font-color  ${item.status.permissionstatus == 2? " " : "hidden"}  `} to={`/detialofours/${item.id}`}>查看</Link>
+                      <Link className={`font-color  ${item.status.permissionstatus == 0? " " : "hidden"} `} onClick={() => this.handleChange(item)}>申请查看</Link>
                   </td>
                 </tr>);
         });

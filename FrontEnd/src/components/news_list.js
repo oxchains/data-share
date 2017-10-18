@@ -16,8 +16,9 @@ class NewsList extends Component {
   }
     handleAgree = (item) =>{
       console.log("2121")
-      console.log(item)
-        const {recordid, ownerid, userid, permissiontype, deadline} = item
+      console.log(item.hospital)
+        const {recordid,  userid} = item
+        const {ownerid, permissiontype, deadline } = item.hospital
         this.props.fetchNewsAgree({recordid, ownerid, userid, permissiontype, deadline},()=>{});
     }
     handleRefuse = (item) =>{
@@ -29,8 +30,8 @@ class NewsList extends Component {
         console.log(alldata)
         return alldata.map((item, idx) => {
             return (
-                <tr  className={`${item.tempStatus == 1?"":"hidden"}`}  key={idx}>
-                  <td className="news_title">{item.requestproviderid} 请求查看 {item.recordid}</td>
+                <tr  className={`${item.permissionstatus == 1?"":"hidden"}`}  key={idx}>
+                  <td className="news_title">{item.userid} 请求查看 {item.recordid}</td>
                   <td className="text-center">
                       <button onClick={() => this.handleAgree(item)} className={`btn-agree`} >同意</button>
                   </td>
@@ -62,6 +63,7 @@ class NewsList extends Component {
 }
 
 function mapStateToProps(state) {
+    // console.log(state.mdicalrecordreducer.all)
     return {
         all: state.mdicalrecordreducer.all
     };
