@@ -6,18 +6,27 @@ import javax.persistence.*;
  * Created by Luo_xuri on 2017/10/16.
  */
 @Entity
-@Table(name = "status", uniqueConstraints = @UniqueConstraint(columnNames = { "recordid" }))
+@Table(name = "status")
 public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String providerid;
     private String recordid;
-    private String ownerid;
     private String permissionstatus;
-    private String requestproviderid;
+    private String userid;
+
+    @Transient
+    private Hospital hospital;
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public Long getId() {
         return id;
@@ -27,13 +36,6 @@ public class Status {
         this.id = id;
     }
 
-    public String getProviderid() {
-        return providerid;
-    }
-
-    public void setProviderid(String providerid) {
-        this.providerid = providerid;
-    }
 
     public String getRecordid() {
         return recordid;
@@ -41,14 +43,6 @@ public class Status {
 
     public void setRecordid(String recordid) {
         this.recordid = recordid;
-    }
-
-    public String getOwnerid() {
-        return ownerid;
-    }
-
-    public void setOwnerid(String ownerid) {
-        this.ownerid = ownerid;
     }
 
     public String getPermissionstatus() {
@@ -59,11 +53,11 @@ public class Status {
         this.permissionstatus = permissionstatus;
     }
 
-    public String getRequestproviderid() {
-        return requestproviderid;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setRequestproviderid(String requestproviderid) {
-        this.requestproviderid = requestproviderid;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }

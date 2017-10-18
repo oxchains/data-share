@@ -47,8 +47,13 @@ public class Hospital {
     @Transient
     private String tempStatus;
 
+    private String loginid;
+
     @Transient
     private String requestproviderid;
+
+    @Transient
+    private Status status;
 
     public Long getId() {
         return id;
@@ -186,11 +191,28 @@ public class Hospital {
         this.tempStatus = tempStatus;
     }
 
+    public String getLoginid() {
+        return loginid;
+    }
+
+    public void setLoginid(String loginid) {
+        this.loginid = loginid;
+    }
+
     public String getRequestproviderid() {
         return requestproviderid;
     }
 
     public void setRequestproviderid(String requestproviderid) {
         this.requestproviderid = requestproviderid;
+    }
+
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

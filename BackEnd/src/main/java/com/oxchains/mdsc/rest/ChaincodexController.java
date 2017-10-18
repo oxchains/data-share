@@ -125,11 +125,13 @@ public class ChaincodexController {
         return mdscxService.requestPermission(hospital);
     }
 
+
     // 处理请求
     @PostMapping(value = "/deal")
     public RestResp solveRequest(@RequestBody Hospital hospital){
         return mdscxService.solveRequest(hospital);
     }
+
 
     // 不处理请求
     @PostMapping(value = "/nodeal")

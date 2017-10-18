@@ -98,6 +98,7 @@ public class MdscxService {
         return chaincodexService.invoke("addPermission", recordId, ownerId, userId, permissionType, deadline);
     }
 
+
     //4.数据所有者移除部分用户权限
     public RestResp removePermission(Hospital hospital) {
         String recordId = hospital.getRecordid();
@@ -158,33 +159,32 @@ public class MdscxService {
         return chaincodexService.invoke("setShareItemString", recordId, ownerId, dataItem, itemIngegral);
     }
 
-    //13 请求权限
+    //13 医院请求权限
     public RestResp requestPermission(Hospital hospital){
-
         if(hospital.getRecordid().isEmpty()){
             return RestResp.fail();
         } else {
-            Status statusInfo = statusRepo.findByRecordid(hospital.getRecordid());
+            Status statusInfo = statusRepo.findByUseridAndRecordid(hospital.getLoginid(),hospital.getRecordid());
             if (statusInfo != null) {
                 String status = statusInfo.getPermissionstatus();
-                if (status.equals("1")){
-                    return RestResp.success("正在等待授权！");
-                } else if (status.equals("0")) {
+                //statusInfo.setUserid(hospital.getLoginid());
+                statusRepo.save(statusInfo);
+                if (status.equals("0")) {
                     statusInfo.setPermissionstatus("1");
-                    statusInfo.setRequestproviderid(hospital.getProviderid());
                     statusRepo.save(statusInfo);
-                    return RestResp.success("权限请求成功！");
-                } else if (status.equals("2")){
-                    return RestResp.success("已授权！");
+                    return RestResp.success("正在等待授权！");
                 }
             }else {
                 // 将状态码存到数据库中（1 是 确定）
+                statusInfo=new Status();
                 statusInfo.setPermissionstatus("1");
                 statusInfo.setRecordid(hospital.getRecordid());
-                statusInfo.setProviderid(hospital.getProviderid());
-                statusInfo.setOwnerid(hospital.getOwnerid());
+
+                System.out.println(hospital.getLoginid());
+
+                statusInfo.setUserid(hospital.getLoginid());
                 statusRepo.save(statusInfo);
-                hospitalRepo.save(hospital);
+                //hospitalRepo.save(hospital);
                 return RestResp.success("权限请求成功！");
             }
             return RestResp.fail("申请异常");
@@ -192,26 +192,28 @@ public class MdscxService {
     }
 
     //14 处理请求
-    public RestResp solveRequest(Hospital hospital){
-        Hospital hospitalInfo = hospitalRepo.findByRecordid(hospital.getRecordid());
-        Status statusInfo = statusRepo.findByRecordid(hospital.getRecordid());
-
+    public RestResp solveRequest(Hospital hospital){//1 0
+        System.out.println(hospital.getOwnerid());
+        System.out.println(hospital.getDeadline());
+        System.out.println(hospital.getPermissiontype());
+        System.out.println(hospital.getRecordid());
+        //Hospital hospitalInfo = hospitalRepo.findByRecordid(hospital.getRecordid());
+        //Status statusInfo = statusRepo.findByUseridAndRecordid(hospitalInfo.getUserid(), hospital.getRecordid());
+        Status statusInfo = statusRepo.findByUseridAndRecordid(hospital.getUserid(), hospital.getRecordid());
         if (statusInfo != null){
-
             String status = statusInfo.getPermissionstatus();
             if (status.equals("1")){
                 try{
-                    hospitalInfo.setUserid(statusInfo.getRequestproviderid());
                     this.addPermission(hospital);
                 }catch (Exception e){
                     Log.error("添加权限失败", e);
+                    return RestResp.fail("添加权限失败");
                 }
-
                 statusInfo.setPermissionstatus("2");
-                statusInfo.setRequestproviderid(hospital.getUserid());
+                //statusInfo.setUserid(hospital.getLoginid());
                 statusRepo.save(statusInfo);
 
-                hospitalRepo.save(hospitalInfo);
+                //hospitalRepo.save(hospitalInfo);
                 return RestResp.success("授权成功！");
             } else {
                 return RestResp.fail("无人申请！");
@@ -224,7 +226,7 @@ public class MdscxService {
     //15 不处理请求
     public RestResp noSolveRequest(Hospital hospital){
 
-        Status statusInfo = statusRepo.findByOwneridAndRecordid(hospital.getOwnerid(), hospital.getRecordid());
+        Status statusInfo = statusRepo.findByUseridAndRecordid(hospital.getLoginid(), hospital.getRecordid());
         if (statusInfo != null){
             String status = statusInfo.getPermissionstatus();
             if (status.equals("1")){
@@ -252,14 +254,23 @@ public class MdscxService {
 
     // 医院输入用户身份证点击-搜索，获取病例列表
     public RestResp searchPatientRecord(String ownerid, String loginname){
-        System.out.println(loginname);
         List<Hospital> hospitalsList = hospitalRepo.findByOwnerid(ownerid);
-        if(!hospitalsList.isEmpty() && hospitalsList.size() != 0){
+        if(null != hospitalsList && hospitalsList.size() != 0){
             for(int i = 0; i < hospitalsList.size(); i++){
                 Hospital hospitalInfo = hospitalsList.get(i);
-                Status statusInfo = statusRepo.findByProvideridAndRecordid(hospitalInfo.getProviderid(), hospitalInfo.getRecordid());
+                Status statusInfo = statusRepo.findByUseridAndRecordid(loginname,hospitalInfo.getRecordid());
+                if(null != statusInfo){
+                    hospitalInfo.setStatus(statusInfo);
+                }else {
+                    statusInfo.setUserid(loginname);
+                    statusInfo.setPermissionstatus("0");
+                    statusInfo.setRecordid(hospitalInfo.getRecordid());
+                }
+                statusRepo.save(statusInfo);
 
-                hospitalInfo.setTempStatus(statusInfo.getPermissionstatus());
+                hospitalInfo.setLoginid(loginname);
+
+                hospitalRepo.save(hospitalInfo);
             }
             return RestResp.success(hospitalsList);
         }else {
@@ -268,21 +279,20 @@ public class MdscxService {
 
     }
 
+
     // 消息通知页面返回的数据
     public RestResp getData(String ownerid){
-        List<Hospital> hospitalsList = hospitalRepo.findByOwnerid(ownerid);
-        if(!hospitalsList.isEmpty() && hospitalsList.size() != 0){
-            for (int i = 0; i < hospitalsList.size(); i++){
-                Hospital hospitalInfo = hospitalsList.get(i);
-                Status statusInfo = statusRepo.findByProvideridAndRecordid(hospitalInfo.getProviderid(), hospitalInfo.getRecordid());
-                hospitalsList.get(i).setTempStatus(statusInfo.getPermissionstatus());
-                hospitalsList.get(i).setRequestproviderid(statusInfo.getRequestproviderid());
+        List<Status> statusList = (List<Status>) statusRepo.findAll();
+        if(null != statusList && statusList.size() != 0){
+            for (int i=0; i<statusList.size(); i++){
+                String recordid = statusList.get(i).getRecordid();
+                Hospital hospitalInfo = hospitalRepo.findByRecordid(recordid);
+                statusList.get(i).setHospital(hospitalInfo);
             }
-            return RestResp.success(hospitalsList);
+            return RestResp.success(statusList);
         }else {
             return RestResp.fail();
         }
-
     }
 
     // 医院点击记录查看详细
@@ -321,33 +331,46 @@ public class MdscxService {
     // 病人系统点击共享进入详细之后点击“共享”按钮
     public RestResp shareRecord(Hospital hospital){
         Hospital hospitalInfo = hospitalRepo.findByRecordidAndOwnerid(hospital.getRecordid(), hospital.getOwnerid());
-        Status statusInfo = statusRepo.findByRecordid(hospital.getRecordid());
-        if(hospitalInfo != null && statusInfo != null){
-            if (statusInfo.getPermissionstatus().equals("2") && statusInfo.getProviderid().equals(hospital.getProviderid())){
-                return RestResp.fail("此条记录已共享");
-            }else {
-                hospitalInfo.setRecordid(hospital.getRecordid());
-                hospitalInfo.setOwnerid(hospital.getOwnerid());
-                hospitalInfo.setUserid(hospital.getProviderid());// 给谁权限看，userid就是谁
-                hospitalInfo.setProviderid(hospital.getProviderid());
-                // hospitalInfo.setPermissiontype("permission_all");// 没有添加权限页面，暂时都是permission_all
-                hospitalInfo.setPermissiontype(hospital.getPermissiontype());
-                hospitalInfo.setDeadline(hospital.getDeadline());
-                hospitalInfo.setHealtime(hospital.getHealtime());
-                hospitalInfo.setHealailment(hospital.getHealailment());
+//        Status statusInfo = statusRepo.findByRecordid(hospital.getRecordid());
+        List<Status> statusList = statusRepo.findByRecordid(hospital.getRecordid());
 
-                statusInfo.setPermissionstatus("2");
-                statusInfo.setProviderid(hospital.getUserid());
-                statusInfo.setRecordid(hospital.getRecordid());
-                try {
-                    this.addPermission(hospital);
-                }catch (Exception e){
-                    Log.error("添加权限失败", e);
-                }
-                hospitalRepo.save(hospitalInfo);
-                statusRepo.save(statusInfo);
-                return RestResp.success("共享成功", hospitalInfo);
+        System.out.println("userid="+hospital.getUserid());
+        System.out.println("recordid="+hospital.getRecordid());
+        System.out.println("ownerid="+hospital.getOwnerid());
+        System.out.println("dealline="+hospital.getDeadline());
+        System.out.println("pertype="+hospital.getPermissiontype());
+
+        Status statusInfo = statusRepo.findByUseridAndRecordid(hospital.getUserid(), hospital.getRecordid());
+        if(hospitalInfo != null && statusList != null){
+//            for (int i=0; i<statusList.size();i++){
+                if (statusInfo.getPermissionstatus().equals("2") && statusInfo.getUserid().equals(hospital.getUserid())){
+                    return RestResp.fail("此条记录已共享");
+                }else {
+                    hospitalInfo.setRecordid(hospital.getRecordid());
+                    hospitalInfo.setOwnerid(hospital.getOwnerid());
+                    hospitalInfo.setUserid(hospital.getUserid());// 给谁权限看，userid就是谁
+                    hospitalInfo.setProviderid(hospital.getProviderid());
+                    // hospitalInfo.setPermissiontype("permission_all");// 没有添加权限页面，暂时都是permission_all
+                    hospitalInfo.setPermissiontype(hospital.getPermissiontype());
+                    hospitalInfo.setDeadline(hospital.getDeadline());
+                    hospitalInfo.setHealtime(hospital.getHealtime());
+                    hospitalInfo.setHealailment(hospital.getHealailment());
+
+                    statusInfo.setPermissionstatus("2");
+                    statusInfo.setUserid(hospital.getUserid());
+                    statusInfo.setRecordid(hospital.getRecordid());
+                    try {
+                        this.addPermission(hospital);
+                    }catch (Exception e){
+                        Log.error("添加权限失败", e);
+                        return RestResp.fail("添加权限失败");
+                    }
+                    hospitalRepo.save(hospitalInfo);
+                    statusRepo.save(statusList);
+
+//                }
             }
+            return RestResp.success("共享成功", hospitalInfo);
         }else {
             return RestResp.fail("没有这条记录");
         }

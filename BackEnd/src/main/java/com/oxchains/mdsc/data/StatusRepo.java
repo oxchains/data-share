@@ -13,15 +13,6 @@ import java.util.List;
 @Repository
 public interface StatusRepo extends CrudRepository<Status, Long> {
 
-    Status findByRecordid(String recordid);
-
-    List<Status> findByProviderid(String providerid);
-
-    List<Status> findByOwnerid(String ownerid);
-
-    Status findByProvideridAndRecordid(String providerid, String recordid);
-
-    Status findByRequestprovideridAndRecordid(String requestProviderid, String recordid);
-
-    Status findByOwneridAndRecordid(String ownerid, String recordid);
+    List<Status> findByRecordid(String recordid);
+    Status findByUseridAndRecordid(String loginname, String recordid);
 }

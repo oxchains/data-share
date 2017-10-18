@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,13 +34,15 @@ public class TokenController {
     private UserTokenRepo userTokenRepo;
     private JwtService jwtService;
     private ResearchRepo researchRepo;
+    private HospitalRepo hospitalRepo;
 
-    public TokenController(@Autowired CompanyUserRepo companyUserRepo, @Autowired UserRepo userRepo, @Autowired UserTokenRepo userTokenRepo, @Autowired JwtService jwtService, @Autowired ResearchRepo researchRepo) {
+    public TokenController(@Autowired CompanyUserRepo companyUserRepo, @Autowired UserRepo userRepo, @Autowired UserTokenRepo userTokenRepo, @Autowired JwtService jwtService, @Autowired ResearchRepo researchRepo, @Autowired HospitalRepo hospitalRepo) {
         this.userRepo = userRepo;
         this.companyUserRepo = companyUserRepo;
         this.userTokenRepo = userTokenRepo;
         this.jwtService = jwtService;
         this.researchRepo = researchRepo;
+        this.hospitalRepo = hospitalRepo;
     }
 
     @PostMapping
@@ -50,6 +53,13 @@ public class TokenController {
           .map(u -> {
               UserToken userToken = new UserToken(jwtService.generate(u, user.isBiz()));
               LOG.info("{} enrolled", user.getUsername());
+              //================================
+              /*List<Hospital> hospitalList = (List<Hospital>) hospitalRepo.findAll();
+              for (int i=0; i<hospitalList.size(); i++){
+                  hospitalList.get(i).setLoginid(user.getUsername());
+              }
+              hospitalRepo.save(hospitalList);*/
+              //==================================
               return RestResp.success(userTokenRepo.save(userToken));
           })
           .orElse(RestResp.fail());
